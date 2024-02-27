@@ -25,9 +25,6 @@ namespace FribergRentals
             builder.Services.AddTransient<IAdmin, AdminRepo>();
             builder.Services.AddTransient<IUser, UserRepo>();
 
-            //builder.Services.AddSingleton<CustomerRepo>();
-
-
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

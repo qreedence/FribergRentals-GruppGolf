@@ -45,10 +45,6 @@ namespace FribergRentals.Data.Repositories
         }
         public void SaveUserChanges(User user)
         {
-            //_applicationDbContext.Attach(user).State = EntityState.Modified;
-
-            // var entity = _applicationDbContext.Attach(user);
-            //entity(user).State = EntityState.Modified;
             _applicationDbContext.Add(user);
             _applicationDbContext.SaveChanges();
         }

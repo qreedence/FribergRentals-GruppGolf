@@ -8,10 +8,10 @@
 
 <h3>Add a new user</h3>
 
-<form method="post" @onsubmit="Submit" @formname="new-user-form">
-    <AntiforgeryToken />
+<EditForm Model="Customer" OnSubmit="Submit" FormName="new-user-form">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
     <div>
-        New user:
         <dl>
             <dt>Firstname</dt>
             <dd>
@@ -28,9 +28,9 @@
          </dl>
     </div>
     <div>
-        <button type="submit">Submit</button>
+        <button type="submit">Add user</button>
     </div>
-</form>
+</EditForm>
 
 <p>@Confirm</p>
 
