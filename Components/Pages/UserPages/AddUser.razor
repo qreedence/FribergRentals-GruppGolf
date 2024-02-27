@@ -4,6 +4,7 @@
 @using FribergRentals.Data.Interfaces
 
 @inject ICustomer CustomerRepo
+@inject NavigationManager NavManager
 
 <h3>Add a new user</h3>
 
@@ -31,38 +32,26 @@
     </div>
 </form>
 
+<p>@Confirm</p>
+
 @code {
     [SupplyParameterFromForm]
-    //public UserInfo? Model { get; set; }
     public Customer Customer { get; set; }
     public string Id { get; set; }
-
-    //protected override void OnInitialized() => Model ??= new();
+    public string Confirm;
     protected override void OnInitialized() => Customer ??= new();
-
-    protected override Task OnInitializedAsync()
-    {
-        //Customer = new Customer();
-        return base.OnInitializedAsync();
-    }
 
     private void Submit()
     {
-        Console.WriteLine(Customer.FirstName);
-        // Customer = new Customer();
-        //Customer.Id = int.Parse(Id);
-        Customer.Id = 0;
-        CustomerRepo.Add(Customer);
-
-
-    }
-
-    // Unused?
-    public class UserInfo
-    {
-        public string Id { get; set; }
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public string? Email { get; set; }
+        if (Customer != null)
+        {
+            Customer.Id = 0;
+            CustomerRepo.Add(Customer);
+            Confirm = "User added";
+        }
+        else
+        {
+            Confirm = "Something went wrong, try again!";
+        }
     }
 }
