@@ -1,0 +1,68 @@
+﻿@page "/adduser"
+@using FribergRentals.Data.Repositories
+@using FribergRentals.Data.Models
+@using FribergRentals.Data.Interfaces
+
+@inject ICustomer CustomerRepo
+
+<h3>Add a new user</h3>
+
+<form method="post" @onsubmit="Submit" @formname="new-user-form">
+    <AntiforgeryToken />
+    <div>
+        New user:
+        <dl>
+            <dt>Firstname</dt>
+            <dd>
+                <InputText @bind-Value="Customer!.FirstName" />
+            </dd>
+            <dt>Lastname</dt>
+                <dd>
+                <InputText @bind-Value="Customer!.LastName" />
+                </dd>
+            <dt>Email</dt>
+                <dd>
+                <InputText @bind-Value="Customer!.Email" />
+                </dd>
+         </dl>
+    </div>
+    <div>
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+@code {
+    [SupplyParameterFromForm]
+    //public UserInfo? Model { get; set; }
+    public Customer Customer { get; set; }
+    public string Id { get; set; }
+
+    //protected override void OnInitialized() => Model ??= new();
+    protected override void OnInitialized() => Customer ??= new();
+
+    protected override Task OnInitializedAsync()
+    {
+        //Customer = new Customer();
+        return base.OnInitializedAsync();
+    }
+
+    private void Submit()
+    {
+        Console.WriteLine(Customer.FirstName);
+        // Customer = new Customer();
+        //Customer.Id = int.Parse(Id);
+        Customer.Id = 0;
+        CustomerRepo.Add(Customer);
+
+
+    }
+
+    // Unused?
+    public class UserInfo
+    {
+        public string Id { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? Email { get; set; }
+    }
+}

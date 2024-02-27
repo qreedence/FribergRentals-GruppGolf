@@ -12,11 +12,16 @@ namespace FribergRentals.Data.Repositories
             _applicationDbContext = applicationDbContext;
         }
 
-        public void Add(User user)
+        public void Add(Customer customer)
         {
             throw new NotImplementedException();
-        }
 
+        }
+        public void Add(Admin admin)
+        {
+            throw new NotImplementedException();
+
+        }
         public void Delete(int id)
         {
             throw new NotImplementedException();

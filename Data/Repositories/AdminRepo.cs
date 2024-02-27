@@ -1,5 +1,6 @@
 ﻿using FribergRentals.Data.Interfaces;
 using FribergRentals.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FribergRentals.Data.Repositories
 {
@@ -12,12 +13,18 @@ namespace FribergRentals.Data.Repositories
             _applicationDbContext = applicationDbContext;
         }
 
-        public void Add(User user)
+        public void Add(Admin admin)
+        {
+            _applicationDbContext.Add(admin);
+            SaveUserChanges(admin);
+        }
+
+        public void Delete(int id)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(int id)
+        public void Edit(Admin admin)
         {
             throw new NotImplementedException();
         }
@@ -27,12 +34,22 @@ namespace FribergRentals.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<User> GetAll()
+        public IEnumerable<Admin> GetAll()
         {
             throw new NotImplementedException();
         }
 
         public User GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
+        public void SaveUserChanges(Admin admin)
+        {
+            _applicationDbContext.Attach(admin).State = EntityState.Modified;
+            _applicationDbContext.SaveChanges();
+        }
+
+        IEnumerable<User> IUser.GetAll()
         {
             throw new NotImplementedException();
         }

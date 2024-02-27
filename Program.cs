@@ -20,10 +20,13 @@ namespace FribergRentals
                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
 
             builder.Services.AddTransient<ICar, CarRepo>();
-            builder.Services.AddTransient<ICustomer, CustomerRepo>();
+            builder.Services.AddScoped<ICustomer, CustomerRepo>();
             builder.Services.AddTransient<IOrder, OrderRepo>();
             builder.Services.AddTransient<IAdmin, AdminRepo>();
             builder.Services.AddTransient<IUser, UserRepo>();
+
+            //builder.Services.AddSingleton<CustomerRepo>();
+
 
             var app = builder.Build();
 

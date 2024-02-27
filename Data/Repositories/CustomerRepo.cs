@@ -13,10 +13,10 @@ namespace FribergRentals.Data.Repositories
             _applicationDbContext = applicationDbContext;
         }
 
-        public void Add(User user)
+        public void Add(Customer customer)
         {
-            _applicationDbContext.Add(user);
-            SaveUserChanges(user);
+            _applicationDbContext.Add(customer);
+            SaveUserChanges(customer);
         }
 
         public void AddOrder(Order order, Customer customer)
@@ -45,7 +45,11 @@ namespace FribergRentals.Data.Repositories
         }
         public void SaveUserChanges(User user)
         {
-            _applicationDbContext.Attach(user).State = EntityState.Modified;
+            //_applicationDbContext.Attach(user).State = EntityState.Modified;
+
+            // var entity = _applicationDbContext.Attach(user);
+            //entity(user).State = EntityState.Modified;
+            _applicationDbContext.Add(user);
             _applicationDbContext.SaveChanges();
         }
     }
