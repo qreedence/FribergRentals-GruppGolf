@@ -1,0 +1,70 @@
+﻿@page "/admin/cars"
+@inject ICar CarRepo
+
+<h3>Cars</h3>
+
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>ImageUrls</th>
+            <th>Category</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (ListOfCars == null)
+            {
+                <tr>
+                    <td>
+                        <span>Loading...</span>
+                    </td>
+                </tr>
+            }
+            else if (ListOfCars.Count == 0)
+            {
+                <tr>
+                    <td colspan="6">
+                        <span>No cars found.</span>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var car in ListOfCars)
+                {
+                    <tr>
+                        <td>@car.Brand</td>
+                        <td>@car.Model</td>
+                        <td>@car.Description</td>
+                        <td>@car.Price</td>
+                        <td>
+                            <select>
+                                @foreach (var imageurl in car.ImageUrls)
+                                {
+                                    <option>@imageurl</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            @*Implement Category here*@
+                        </td>
+                    </tr>
+                }
+            }
+         }
+    </tbody>
+</table>
+
+@code {
+    List<Car> ListOfCars = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListOfCars = await CarRepo.GetAllAsync();
+    }
+
+}

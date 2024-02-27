@@ -1,5 +1,6 @@
 ﻿using FribergRentals.Data.Interfaces;
 using FribergRentals.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FribergRentals.Data.Repositories
 {
@@ -11,28 +12,28 @@ namespace FribergRentals.Data.Repositories
         {
             _applicationDbContext = applicationDbContext;
         }
-    
-        public void Add(Car car)
+
+        public Task AddAsync(Car car)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(int id)
+        public Task DeleteAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public void Edit(Car car)
+        public Task EditAsync(Car car)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Car> GetAll()
+        public async Task<List<Car>> GetAllAsync()
         {
-            throw new NotImplementedException();
+          return await _applicationDbContext.Cars.ToListAsync();
         }
 
-        public Car GetById(int id)
+        public Task<Car> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
