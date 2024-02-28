@@ -24,8 +24,9 @@ namespace FribergRentals
             builder.Services.AddTransient<IOrder, OrderRepo>();
             builder.Services.AddTransient<IAdmin, AdminRepo>();
             builder.Services.AddTransient<IUser, UserRepo>();
+			builder.Services.AddTransient<ICategory, CategoryRepo>();
 
-            var app = builder.Build();
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

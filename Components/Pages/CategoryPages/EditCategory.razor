@@ -1,0 +1,23 @@
+﻿@page "/category/edit"
+@* @page "/category/edit/{id:int}" *@
+@inject ICategory CategoryRepo
+
+<h3>Create Category</h3>
+
+<EditForm Model="category" OnSubmit="HandleSubmit" FormName="editCategory">
+	<label>Name</label>
+	<InputText @bind-Value="category.Name">@category.Name</InputText>
+	<buttton type="submit" class="btn btn-primary">Submit</buttton>
+</EditForm>
+
+	@code {
+	// [Parameter]
+	// public int? Id { get; set; }
+	[SupplyParameterFromForm]
+	Category category { get; set; } = new Category();
+
+	async Task HandleSubmit()
+	{
+		await CategoryRepo.Add(category);
+	}
+}
