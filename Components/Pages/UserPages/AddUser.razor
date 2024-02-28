@@ -1,0 +1,57 @@
+﻿@page "/adduser"
+@using FribergRentals.Data.Repositories
+@using FribergRentals.Data.Models
+@using FribergRentals.Data.Interfaces
+
+@inject ICustomer CustomerRepo
+@inject NavigationManager NavManager
+
+<h3>Add a new user</h3>
+
+<EditForm Model="Customer" OnSubmit="Submit" FormName="new-user-form">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div>
+        <dl>
+            <dt>Firstname</dt>
+            <dd>
+                <InputText @bind-Value="Customer!.FirstName" />
+            </dd>
+            <dt>Lastname</dt>
+                <dd>
+                <InputText @bind-Value="Customer!.LastName" />
+                </dd>
+            <dt>Email</dt>
+                <dd>
+                <InputText @bind-Value="Customer!.Email" />
+                </dd>
+         </dl>
+    </div>
+    <div>
+        <button type="submit">Add user</button>
+    </div>
+</EditForm>
+
+<p>@Confirm</p>
+
+@code {
+    [SupplyParameterFromForm]
+    public Customer Customer { get; set; }
+    public string Id { get; set; }
+    public string Confirm;
+    protected override void OnInitialized() => Customer ??= new();
+
+    private void Submit()
+    {
+        if (Customer != null)
+        {
+            Customer.Id = 0;
+            CustomerRepo.Add(Customer);
+            Confirm = "User added";
+        }
+        else
+        {
+            Confirm = "Something went wrong, try again!";
+        }
+    }
+}

@@ -1,5 +1,6 @@
 ﻿using FribergRentals.Data.Interfaces;
 using FribergRentals.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FribergRentals.Data.Repositories
 {
@@ -12,9 +13,10 @@ namespace FribergRentals.Data.Repositories
             _applicationDbContext = applicationDbContext;
         }
 
-        public void Add(User user)
+        public void Add(Customer customer)
         {
-            throw new NotImplementedException();
+            _applicationDbContext.Add(customer);
+            SaveUserChanges(customer);
         }
 
         public void AddOrder(Order order, Customer customer)
@@ -40,6 +42,11 @@ namespace FribergRentals.Data.Repositories
         public User GetById(int id)
         {
             throw new NotImplementedException();
+        }
+        public void SaveUserChanges(User user)
+        {
+            _applicationDbContext.Add(user);
+            _applicationDbContext.SaveChanges();
         }
     }
 }
