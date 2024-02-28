@@ -10,22 +10,32 @@ namespace FribergRentals.Data.Repositories
 
         public CarRepo(ApplicationDbContext applicationDbContext)
         {
-            _applicationDbContext = applicationDbContext;
+           _applicationDbContext = applicationDbContext;
         }
 
-        public Task AddAsync(Car car)
+        public async Task AddAsync(Car car)
         {
-            throw new NotImplementedException();
+            await _applicationDbContext.Cars.AddAsync(car);
+            await _applicationDbContext.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var car = await _applicationDbContext.Cars.FindAsync(id);
+            if (car != null)
+            {
+                _applicationDbContext.Cars.Remove(car);
+                await _applicationDbContext.SaveChangesAsync();
+            }
         }
 
-        public Task EditAsync(Car car)
+        public async Task EditAsync(Car car)
         {
-            throw new NotImplementedException();
+           if (car != null)
+            {
+                _applicationDbContext.Cars.Update(car);
+                await _applicationDbContext.SaveChangesAsync();
+            }
         }
 
         public async Task<List<Car>> GetAllAsync()
@@ -33,9 +43,9 @@ namespace FribergRentals.Data.Repositories
           return await _applicationDbContext.Cars.ToListAsync();
         }
 
-        public Task<Car> GetByIdAsync(int id)
+        public async Task<Car> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _applicationDbContext.Cars.FindAsync(id);
         }
     }
 }
