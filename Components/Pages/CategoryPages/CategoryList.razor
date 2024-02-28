@@ -1,0 +1,31 @@
+﻿@page "/category"
+@using FribergRentals.Data.Models
+@inject ICategory CategoryRepo
+
+<h3>CategoryList</h3>
+
+@if(categories == null)
+{
+	<span>No Categories</span>
+}
+else if (categories.Count == 0)
+{
+	<span>No Categories</span>
+}
+else{
+	<ul>
+	@foreach (var category in categories)
+	{
+		<li>@category.Name</li>
+	}
+</ul>
+}
+
+@code {
+	List<Category>? categories = null;
+
+	protected override async Task OnInitializedAsync()
+	{
+		categories = await CategoryRepo.GetAll();
+	}
+}
