@@ -13,7 +13,7 @@
             <th>Image URL 1</th>
             <th>Image URL 2</th>
             <th>Image URL 3</th>
-            <th colspan="2">Categories</th>
+            <th colspan="2">Categories</th> 
         </tr>
     </thead>
     <tbody>
@@ -47,12 +47,22 @@
                         <td>@car.ImageUrl2</td>
                         <td>@car.ImageUrl3</td>
                         <td>
-                            @*Implement Category here*@
+                            @if (car.Categories == null)
+                            {
+                                <p>No categories found.</p>
+                            }
+                            else if (car.Categories.Count > 0)
+                            {
+                                @foreach (var category in car.Categories)
+                                {
+                                    <p>@category.Name</p>
+                                }
+                            }
                         </td>
                         <td>
                             <div>
-                                <button type="button"><NavLink href="edit/@car.Id">Edit</NavLink></button>
-                                <button type="button"><NavLink href="delete/@car.Id">Delete</NavLink></button>
+                                @* <button type="button"><NavLink href="edit/@car.Id">Edit</NavLink></button> 
+                                 <button type="button"><NavLink href="delete/@car.Id">Delete</NavLink></button> *@
                             </div>
                         </td>
                     </tr>

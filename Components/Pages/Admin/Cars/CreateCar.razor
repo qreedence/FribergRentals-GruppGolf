@@ -1,6 +1,6 @@
 ﻿@page "/admin/cars/create"
 @inject ICar CarRepo
-@*inject ICategory CategoryRepo*@
+@inject ICategory CategoryRepo
 
 <h3>Add New Car</h3>
 
@@ -30,28 +30,72 @@
         <label>Image URL 3</label>
         <InputText @bind-Value="Car.ImageUrl3"></InputText>
     </div>
-    
-    @*Implementering av Category Repository behövs*@
-
-    @*
     <div>
-    <label>Category</label>
-    @foreach (var category in CategoryRepo.GetAll().ToList)
-    {
-    <InputCheckbox>@category.Name</InputCheckbox>
-    }
+        <label>Categories</label>
+        @if (Categories == null)
+        {
+            <p>Loading..</p>
+        }
+        else if (Categories.Count == 0)
+        {
+            <p>No categories found.</p>
+        } 
+        else
+        {
+            <ul>
+                @foreach (var category in Categories)
+                {
+                    <li>
+                        <input type="checkbox" @onclick="(e) => ToggleCategorySelection(e, category.Id)" />
+                        <label>@category.Name</label>
+                    </li>
+                }
+            </ul>
+        }
     </div>
-    *@
+
 
     <button type="submit">Create</button>
 </EditForm>
 
 @code {
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
     [SupplyParameterFromForm]
-    public Car Car { get; set; } = new Car();
+    public Car Car { get; set; }
+
+    public List<Category> Categories { get; set; } = new List<Category>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Car == null)
+        {
+            Car = new Car { Categories = new List<Category>() };
+        }
+        Categories = await CategoryRepo.GetAll();
+    }
 
     public async Task Submit()
     {
-        await CarRepo.AddAsync(Car);
+            await CarRepo.AddAsync(Car);
+            NavigationManager.NavigateTo("/admin/cars");
+    }
+
+    public async Task ToggleCategorySelection(MouseEventArgs e, int categoryId)
+    {
+        var category = Categories.FirstOrDefault(c => c.Id == categoryId);
+        if (category != null)
+        {
+            if (Car.Categories.Contains(category))
+            {
+                Car.Categories.Remove(category);
+            }
+            else
+            {
+                Car.Categories.Add(category);
+            }
+        }
     }
 }
+

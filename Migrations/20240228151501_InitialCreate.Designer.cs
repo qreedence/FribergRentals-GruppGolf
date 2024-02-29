@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FribergRentals.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240227150625_ChangeCarModel")]
-    partial class ChangeCarModel
+    [Migration("20240228151501_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace FribergRentals.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CarCategory", b =>
+                {
+                    b.Property<int>("CarsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoriesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CarsId", "CategoriesId");
+
+                    b.HasIndex("CategoriesId");
+
+                    b.ToTable("CarCategory");
+                });
 
             modelBuilder.Entity("FribergRentals.Data.Models.Admin", b =>
                 {
@@ -94,18 +109,13 @@ namespace FribergRentals.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CarId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CarId");
-
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("FribergRentals.Data.Models.Customer", b =>
@@ -165,11 +175,19 @@ namespace FribergRentals.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("FribergRentals.Data.Models.Category", b =>
+            modelBuilder.Entity("CarCategory", b =>
                 {
                     b.HasOne("FribergRentals.Data.Models.Car", null)
-                        .WithMany("Category")
-                        .HasForeignKey("CarId");
+                        .WithMany()
+                        .HasForeignKey("CarsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FribergRentals.Data.Models.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FribergRentals.Data.Models.Order", b =>
@@ -189,11 +207,6 @@ namespace FribergRentals.Migrations
                     b.Navigation("Car");
 
                     b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("FribergRentals.Data.Models.Car", b =>
-                {
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("FribergRentals.Data.Models.Customer", b =>

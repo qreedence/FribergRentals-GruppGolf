@@ -7,6 +7,7 @@ namespace FribergRentals.Data.Interfaces
 		public Task<Category> Add(Category category);
 		public void Edit(Category category);
 		public void Delete(int id);
-		Task <List<Category>> GetAll();
+		Task<List<Category>> GetAll();
+		Task<Category> GetByIdAsync(int id);
 	}
 }
