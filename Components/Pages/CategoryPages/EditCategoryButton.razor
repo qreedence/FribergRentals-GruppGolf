@@ -1,0 +1,13 @@
+﻿@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<button @onclick="EditCategory">Edit</button>
+@code {
+	[Parameter]
+	public int Id { get; set; }
+
+	void EditCategory()
+	{
+		NavigationManager.NavigateTo($"category/edit/{Id}");
+	}
+}
