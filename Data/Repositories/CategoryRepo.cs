@@ -20,15 +20,21 @@ namespace FribergRentals.Data.Repositories
 			return category;
 		}
 
-		public void Delete(int id)
+		public async Task Delete(int id)
 		{
 			Category category = _applicationDbContext.Categories.Find(id);
-			_applicationDbContext.Categories.Remove(category);
+			_applicationDbContext.Remove(category);
+			await _applicationDbContext.SaveChangesAsync();
 		}
 
-		public void Edit(Category category)
+		public async Task Edit(Category category)
 		{
-			_applicationDbContext.Categories.Update(category);
+			if (category != null)
+			{
+				_applicationDbContext.Categories.Update(category);
+				await _applicationDbContext.SaveChangesAsync();
+			}
+
 		}
 
 		public async Task<List<Category>> GetAll()
@@ -36,6 +42,11 @@ namespace FribergRentals.Data.Repositories
 			var categories = await _applicationDbContext.Categories.ToListAsync();
 			return categories;
 		}
-		
+
+		public async Task<Category> GetById(int id)
+		{
+			return await _applicationDbContext.Categories.FindAsync(id);
+		}
+
 	}
 }

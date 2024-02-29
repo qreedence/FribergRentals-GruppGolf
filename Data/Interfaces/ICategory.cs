@@ -4,9 +4,10 @@ namespace FribergRentals.Data.Interfaces
 {
 	public interface ICategory
 	{
-		public Task<Category> Add(Category category);
-		public void Edit(Category category);
-		public void Delete(int id);
+		Task<Category> Add(Category category);
+		Task Edit(Category category);
+		Task Delete(int id);
 		Task <List<Category>> GetAll();
+		Task <Category> GetById(int id);
 	}
 }
