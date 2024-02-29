@@ -1,9 +1,10 @@
 ﻿using FribergRentals.Data.Interfaces;
 using FribergRentals.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FribergRentals.Data.Repositories
 {
-    public class UserRepo : IUser
+    public abstract class UserRepo<T> : IUser<T> where T : User
     {
         private readonly ApplicationDbContext _applicationDbContext;
 
@@ -12,34 +13,33 @@ namespace FribergRentals.Data.Repositories
             _applicationDbContext = applicationDbContext;
         }
 
-        public void Add(Customer customer)
+        public void Add(T user)
         {
             throw new NotImplementedException();
-
-        }
-        public void Add(Admin admin)
-        {
-            throw new NotImplementedException();
-
-        }
+        }       
         public void Delete(int id)
         {
             throw new NotImplementedException();
         }
 
-        public void Edit(User user)
+        public void Edit(T user)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<User> GetAll()
+
+
+        public List<User> GetAll()
+        {
+            //return await _applicationDbContext.Customers.ToListAsync();
+            throw new NotImplementedException();
+        }
+
+        public T GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public User GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

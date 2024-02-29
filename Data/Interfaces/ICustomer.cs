@@ -2,7 +2,7 @@
 
 namespace FribergRentals.Data.Interfaces
 {
-    public interface ICustomer : IUser
+    public interface ICustomer : IUser<Customer>
     {
         public void Add(Customer customer);
 

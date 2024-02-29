@@ -7,13 +7,15 @@ namespace FribergRentals.Data.Repositories
     {
         private readonly ApplicationDbContext _applicationDbContext;
         private readonly ICar _carRepo;
-        private readonly IUser _userRepo;
+        private readonly ICustomer _customerRepo;
+        private readonly IAdmin _adminRepo;
 
-        public OrderRepo(ApplicationDbContext applicationDbContext, ICar carRepo, IUser userRepo)
+        public OrderRepo(ApplicationDbContext applicationDbContext, ICar carRepo, ICustomer customerRepo, IAdmin adminRepo)
         {
             _applicationDbContext = applicationDbContext;
             _carRepo = carRepo;
-            _userRepo = userRepo;
+            _customerRepo = customerRepo;
+            _adminRepo = adminRepo;
         }
 
         public void Add(Order order)
