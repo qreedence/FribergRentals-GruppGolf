@@ -36,6 +36,11 @@ namespace FribergRentals.Data.Repositories
 			var categories = await _applicationDbContext.Categories.ToListAsync();
 			return categories;
 		}
+
+		public async Task<Category> GetByIdAsync(int id)
+		{
+			return await _applicationDbContext.Categories.FindAsync(id);
+		}
 		
 	}
 }
