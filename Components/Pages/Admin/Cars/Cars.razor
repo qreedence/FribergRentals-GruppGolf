@@ -61,6 +61,7 @@
                         </td>
                         <td>
                             <div>
+                                <EditCarButton Id="car.Id"></EditCarButton>
                             </div>
                         </td>
                     </tr>
@@ -69,6 +70,8 @@
          }
     </tbody>
 </table>
+
+<NavLink href="admin/cars/create" Match="NavLinkMatch.All">Create New Car</NavLink>
 
 @code {
     List<Car> ListOfCars = null;
