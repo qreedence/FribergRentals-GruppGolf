@@ -13,7 +13,6 @@ else
 	<h3>Edit Category</h3>
 }
 
-
 <EditForm Model="category" OnSubmit="HandleSubmit" FormName="editCategory">
 	<label>Name</label>
 	<InputText @bind-Value="category.Name">@category.Name</InputText>
@@ -38,7 +37,7 @@ else
 	{
 		if (Id != null)
 		{
-			category = await CategoryRepo.GetById((int)Id);
+			category = await CategoryRepo.GetByIdAsync((int)Id);
 		}
 
 	}
