@@ -40,7 +40,7 @@ namespace FribergRentals.Data.Repositories
 
         public async Task<List<Car>> GetAllAsync()
         {
-          return await _applicationDbContext.Cars.ToListAsync();
+            return await _applicationDbContext.Cars.ToListAsync();
         }
 
         public async Task<Car> GetByIdAsync(int id)
