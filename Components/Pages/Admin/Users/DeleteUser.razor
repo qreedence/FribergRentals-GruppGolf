@@ -1,21 +1,20 @@
 ﻿@page "/admin/users/deleteuser"
-@inject ICustomer CustomerRepo
-@inject IAdmin AdminRepo
+@inject IUser<User> UserRepo
 <h3>DeleteUser</h3>
 
 @code {
     [Parameter]
     public int Id { get; set; }
 
-    public Customer Customer { get; set; }
+    public User User { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Customer = await CustomerRepo.GetByIdAsync(Id);
+        User = await UserRepo.GetByIdAsync(Id);
     }
 
     public async Task Submit()
     {
-        await CustomerRepo.DeleteAsync(Id);
+        await UserRepo.DeleteAsync(Id);
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FribergRentals.Data.Repositories
 {
-    public abstract class UserRepo<T> : IUser<T> where T : User
+    public class UserRepo<T> : IUser<T> where T : User
     {
         private readonly ApplicationDbContext _applicationDbContext;
 
@@ -21,7 +21,7 @@ namespace FribergRentals.Data.Repositories
                 await _applicationDbContext.SaveChangesAsync();
             }         
         }
-        public async Task<T> DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
             var user = await _applicationDbContext.Users.FindAsync(id);
             if (user != null)
@@ -29,10 +29,10 @@ namespace FribergRentals.Data.Repositories
                 _applicationDbContext.Users.Remove(user);
                 await _applicationDbContext.SaveChangesAsync();
             }
-            return null;
+            
         }
 
-        public async Task<T> EditAsync(T user)
+        public async Task EditAsync(T user)
         {
             if (user != null)
             {
@@ -40,7 +40,6 @@ namespace FribergRentals.Data.Repositories
                 await _applicationDbContext.SaveChangesAsync();
 
             }
-            return null;
         }
 
 
@@ -50,10 +49,10 @@ namespace FribergRentals.Data.Repositories
            return await _applicationDbContext.Users.ToListAsync();          
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<User> GetByIdAsync(int id)
         {
-            await _applicationDbContext.Users.FindAsync(id);
-            return null;
+            return await _applicationDbContext.Users.FindAsync(id);
+            
         }
 
 
