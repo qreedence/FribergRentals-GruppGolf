@@ -4,5 +4,6 @@
     {
         public Category() { }
         public string Name { get; set; }
+        public List<Car>? Cars { get; set; }
     }
 }

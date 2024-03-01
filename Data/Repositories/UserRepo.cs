@@ -17,27 +17,40 @@ namespace FribergRentals.Data.Repositories
         {
             throw new NotImplementedException();
         }       
-        public void Delete(int id)
+        public async Task<T> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var user = await _applicationDbContext.Users.FindAsync(id);
+            if (user != null)
+            {
+                _applicationDbContext.Users.Remove(user);
+                await _applicationDbContext.SaveChangesAsync();
+            }
+            return null;
         }
 
-        public void Edit(T user)
+        public async Task<T> EditAsync(T user)
         {
-            throw new NotImplementedException();
+            if (user != null)
+            {
+                _applicationDbContext.Users.Update(user);
+                await _applicationDbContext.SaveChangesAsync();
+
+            }
+            return null;
         }
 
 
 
-        public List<User> GetAll()
+        public async Task<List<T>> GetAllAsync()
         {
-            //return await _applicationDbContext.Customers.ToListAsync();
-            throw new NotImplementedException();
+            await _applicationDbContext.Users.ToListAsync();
+            return null;
         }
 
-        public T GetById(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            await _applicationDbContext.Users.FindAsync(id);
+            return null;
         }
 
 

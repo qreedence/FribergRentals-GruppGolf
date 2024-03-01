@@ -46,10 +46,10 @@
 </table>
 
 @code {
-    List<User> ListOfCustomers = null;
+    List<Customer> ListOfCustomers = null;
 
     protected override async Task OnInitializedAsync()
     {
-        ListOfCustomers = CustomerRepo.GetAll();
+        ListOfCustomers = await CustomerRepo.GetAllAsync();
     }
 }

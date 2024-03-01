@@ -1,0 +1,35 @@
+﻿@page "/Admin/Users/EditAdmin"
+@inject IAdmin AdminRepo
+
+<h3>EditAdmin</h3>
+<EditForm Model="Admin" OnSubmit="Submit" FormName="EditAdmin">
+    <div>
+        <label>Firstname</label>
+        <InputText @bind-Value="Admin.FirstName" placeholder="@Admin.FirstName"></InputText>
+    </div>
+    <div>
+        <label>Model</label>
+        <InputText @bind-Value="Admin.LastName" placeholder="@Admin.LastName"></InputText>
+    </div>
+    <div>
+        <label>Description</label>
+        <InputText @bind-Value="Admin.Email" placeholder="@Admin.Email"></InputText>
+    </div>
+    <button type="submit">Edit</button>
+</EditForm>
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public Admin Admin { get; set; }
+   
+    protected override async Task OnInitializedAsync()
+    {
+        Admin = await AdminRepo.GetByIdAsync(Id);
+    }
+
+    public async Task Submit()
+    {
+        await AdminRepo.EditAsync(Admin);
+    }
+}
