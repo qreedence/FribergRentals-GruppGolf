@@ -45,10 +45,7 @@
             <ul>
                 @foreach (var category in Categories)
                 {
-                    <li>
-                        <input type="checkbox" @onclick="(e) => ToggleCategorySelection(e, category.Id)" />
-                        <label>@category.Name</label>
-                    </li>
+                    <input type="checkbox" @bind="Car.Categories" value="@category">@category.Name; 
                 }
             </ul>
         }
@@ -64,8 +61,14 @@
 
     [SupplyParameterFromForm]
     public Car Car { get; set; }
+    public List<int> tempId { get; set; }
 
     public List<Category> Categories { get; set; } = new List<Category>();
+
+    void addToList()
+    {
+        Car.Categories = Categories;
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -78,6 +81,7 @@
 
     public async Task Submit()
     {
+            addToList();
             await CarRepo.AddAsync(Car);
             NavigationManager.NavigateTo("/admin/cars");
     }
