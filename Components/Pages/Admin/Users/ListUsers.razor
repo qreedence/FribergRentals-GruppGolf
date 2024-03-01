@@ -1,0 +1,55 @@
+﻿@page "/Customers"
+@inject ICustomer CustomerRepo
+<h3>ListUsers</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Email</th>           
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (ListOfCustomers == null)
+            {
+                <tr>
+                    <td colspan="9">
+                        <span>Loading...</span>
+                    </td>
+                </tr>
+            }
+            else if (ListOfCustomers.Count == 0)
+            {
+                <tr>
+                    <td colspan="9">
+                        <span>No customers found.</span>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var customer in ListOfCustomers)
+                {
+                    <tr>
+                        <td>@customer.FirstName</td>
+                        <td>@customer.LastName</td>
+                        <td>@customer.Email</td>
+                        <td>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    List<User> ListOfCustomers = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListOfCustomers = await CustomerRepo.GetAllAsync();
+    }
+}

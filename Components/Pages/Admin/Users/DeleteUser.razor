@@ -1,0 +1,21 @@
+﻿@page "/admin/users/deleteuser"
+@inject ICustomer CustomerRepo
+@inject IAdmin AdminRepo
+<h3>DeleteUser</h3>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public Customer Customer { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Customer = await CustomerRepo.GetByIdAsync(Id);
+    }
+
+    public async Task Submit()
+    {
+        await CustomerRepo.DeleteAsync(Id);
+    }
+}

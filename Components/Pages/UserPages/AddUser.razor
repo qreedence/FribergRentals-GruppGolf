@@ -46,7 +46,7 @@
         if (Customer != null)
         {
             Customer.Id = 0;
-            CustomerRepo.Add(Customer);
+            CustomerRepo.AddAsync(Customer);
             Confirm = "User added";
         }
         else

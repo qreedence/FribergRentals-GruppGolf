@@ -1,9 +1,10 @@
 ﻿using FribergRentals.Data.Interfaces;
 using FribergRentals.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FribergRentals.Data.Repositories
 {
-    public class UserRepo : IUser
+    public abstract class UserRepo<T> : IUser<T> where T : User
     {
         private readonly ApplicationDbContext _applicationDbContext;
 
@@ -12,34 +13,49 @@ namespace FribergRentals.Data.Repositories
             _applicationDbContext = applicationDbContext;
         }
 
-        public void Add(Customer customer)
+        public async Task AddAsync(T user)
         {
-            throw new NotImplementedException();
-
+            if (user != null)
+            {
+                _applicationDbContext.Users.Add(user);
+                await _applicationDbContext.SaveChangesAsync();
+            }         
         }
-        public void Add(Admin admin)
+        public async Task<T> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
-
-        }
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Edit(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<User> GetAll()
-        {
-            throw new NotImplementedException();
+            var user = await _applicationDbContext.Users.FindAsync(id);
+            if (user != null)
+            {
+                _applicationDbContext.Users.Remove(user);
+                await _applicationDbContext.SaveChangesAsync();
+            }
+            return null;
         }
 
-        public User GetById(int id)
+        public async Task<T> EditAsync(T user)
         {
-            throw new NotImplementedException();
+            if (user != null)
+            {
+                _applicationDbContext.Users.Update(user);
+                await _applicationDbContext.SaveChangesAsync();
+
+            }
+            return null;
         }
+
+
+
+        public async Task<List<User>> GetAllAsync()
+        {
+           return await _applicationDbContext.Users.ToListAsync();          
+        }
+
+        public async Task<T> GetByIdAsync(int id)
+        {
+            await _applicationDbContext.Users.FindAsync(id);
+            return null;
+        }
+
+
     }
 }
