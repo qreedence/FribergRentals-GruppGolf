@@ -25,11 +25,11 @@ namespace FribergRentals.Data
                 .HasValue<Admin>("Admin");
 
             // Optionally, you can configure additional properties for Customer and Admin
-            modelBuilder.Entity<Customer>(c =>
-            {
-                c.Property(e => e.CustomerOrders).IsRequired();
-                // Configure other properties
-            });
+            //modelBuilder.Entity<Customer>(c =>
+            //{
+            //    c.Property(e => e.CustomerOrders).IsRequired();
+            //    // Configure other properties
+            //});
 
         }
 

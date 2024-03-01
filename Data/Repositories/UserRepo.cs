@@ -13,10 +13,14 @@ namespace FribergRentals.Data.Repositories
             _applicationDbContext = applicationDbContext;
         }
 
-        public void Add(T user)
+        public async Task AddAsync(T user)
         {
-            throw new NotImplementedException();
-        }       
+            if (user != null)
+            {
+                _applicationDbContext.Users.Add(user);
+                await _applicationDbContext.SaveChangesAsync();
+            }         
+        }
         public async Task<T> DeleteAsync(int id)
         {
             var user = await _applicationDbContext.Users.FindAsync(id);
@@ -41,10 +45,9 @@ namespace FribergRentals.Data.Repositories
 
 
 
-        public async Task<List<T>> GetAllAsync()
+        public async Task<List<User>> GetAllAsync()
         {
-            await _applicationDbContext.Users.ToListAsync();
-            return null;
+           return await _applicationDbContext.Users.ToListAsync();          
         }
 
         public async Task<T> GetByIdAsync(int id)

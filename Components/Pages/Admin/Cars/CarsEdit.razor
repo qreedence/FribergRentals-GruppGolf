@@ -1,20 +1,24 @@
 ﻿@page "/admin/cars/edit"
+@page "/admin/cars/edit/{id:int}"
 @inject ICar CarRepo
+@inject ICategory CategoryRepo
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
 <h3>Edit Car</h3>
 
 <EditForm Model="Car" OnSubmit="Submit" FormName="EditCar">
     <div>
         <label>Brand</label>
-        <InputText @bind-Value="Car.Brand" placeholder="@Car.Brand"></InputText>
+        <InputText @bind-Value="Car.Brand">@Car.Brand</InputText>
     </div>
     <div>
         <label>Model</label>
-        <InputText @bind-Value="Car.Model" placeholder="@Car.Model"></InputText>
+        <InputText @bind-Value="Car.Model">@Car.Model</InputText>
     </div>
     <div>
         <label>Description</label>
-        <InputText @bind-Value="Car.Description" placeholder="@Car.Description"></InputText>
+        <InputText @bind-Value="Car.Description">@Car.Description</InputText>
     </div>
     <div>
         <label>Price</label>
@@ -29,35 +33,69 @@
         <label>Image URL 3</label>
         <InputText @bind-Value="Car.ImageUrl3" placeholder="@Car.ImageUrl3"></InputText>
     </div>
-
-    @*Implementering av Category Repository behövs*@
-
-    @*
     <div>
-    <label>Category</label>
-    @foreach (var category in CategoryRepo.GetAll().ToList)
-    {
-    <InputCheckbox>@category.Name</InputCheckbox>
-    }
+        <label>Category</label>
+            @foreach (var category in Categories)
+            {
+            <input type="checkbox" checked="@IsCategorySelected(category)" @onclick="() => ToggleCategorySelection(category)">
+            <label>@category.Name</label>
+            }
     </div>
-    *@
-
-    <button type="submit">Edit</button>
+    <button type="submit">Save Changes</button>
+    <button @onclick="Delete" type="button">Delete</button>
 </EditForm>
+
+<NavLink href="admin/cars" Match="NavLinkMatch.All">Back</NavLink>
 
 @code {
     [Parameter]
     public int Id { get; set; }
 
-    public Car Car { get; set; }
+    [SupplyParameterFromForm]
+    public Car Car { get; set; } = new Car();
 
-    protected override async Task OnInitializedAsync()
+    public List<Category> Categories { get; set; } = new List<Category>();
+
+    public List<int> SelectedCategoryIds { get; set; } = new List<int>();
+
+    protected override async Task OnParametersSetAsync()
     {
-        Car = await CarRepo.GetByIdAsync(Id);
+        if (Id > 0)
+        {
+            Car = await CarRepo.GetByIdAsync(Id);
+            Categories = await CategoryRepo.GetAll();
+            SelectedCategoryIds = Car.Categories != null
+            ? Car.Categories.Select(c => c.Id).ToList()
+            : new List<int>();
+        }
     }
 
-    public async Task Submit()
+    async Task Submit()
     {
         await CarRepo.EditAsync(Car);
+        NavigationManager.NavigateTo("/admin/cars");
+    }
+
+    async Task Delete()
+    {
+        await CarRepo.DeleteAsync(Car.Id);
+        NavigationManager.NavigateTo("admin/cars");
+    }
+
+    public bool IsCategorySelected(Category category)
+    {
+        return SelectedCategoryIds.Contains(category.Id);
+    }
+
+    void ToggleCategorySelection(Category category)
+    {
+        if (IsCategorySelected(category))
+        {
+            SelectedCategoryIds.Remove(category.Id);
+        }
+        else
+        {
+            SelectedCategoryIds.Add(category.Id);
+        }
     }
 }

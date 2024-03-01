@@ -1,5 +1,8 @@
-﻿@page "/Admin/Users/EditAdmin"
+﻿@page "/admin/users/editadmin"
+@page "/admin/users/editadmin/{id:int}"
 @inject IAdmin AdminRepo
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
 <h3>EditAdmin</h3>
 <EditForm Model="Admin" OnSubmit="Submit" FormName="EditAdmin">
@@ -16,6 +19,7 @@
         <InputText @bind-Value="Admin.Email" placeholder="@Admin.Email"></InputText>
     </div>
     <button type="submit">Edit</button>
+    <button @onclick="Delete" type="button">Delete</button>
 </EditForm>
 @code {
     [Parameter]
@@ -31,5 +35,10 @@
     public async Task Submit()
     {
         await AdminRepo.EditAsync(Admin);
+    }
+    async Task Delete()
+    {
+        await AdminRepo.DeleteAsync(Admin.Id);
+        NavigationManager.NavigateTo("admin/Customers");
     }
 }

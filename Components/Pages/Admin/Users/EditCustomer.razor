@@ -1,6 +1,7 @@
 ﻿@page "/Admin/Users/EditCustomer"
 @inject ICustomer CustomerRepo 
-
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
 
 
@@ -45,5 +46,10 @@
     public async Task Submit()
     {
         await CustomerRepo.EditAsync(Customer);
+    }
+    async Task Delete()
+    {
+        await CustomerRepo.DeleteAsync(Customer.Id);
+        NavigationManager.NavigateTo("admin/Customers");
     }
 }
