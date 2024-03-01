@@ -1,22 +1,22 @@
-﻿@page "/admin/users/editadmin"
-@page "/admin/users/editadmin/{id:int}"
-@inject IAdmin AdminRepo
+﻿@page "/admin/users/edituser"
+@page "/admin/users/edituser/{id:int}"
+@inject IUser<User> UserRepo
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
 <h3>EditAdmin</h3>
-<EditForm Model="Admin" OnSubmit="Submit" FormName="EditAdmin">
+<EditForm Model="User" OnSubmit="Submit" FormName="EditUser">
     <div>
         <label>Firstname</label>
-        <InputText @bind-Value="Admin.FirstName" placeholder="@Admin.FirstName"></InputText>
+        <InputText @bind-Value="User.FirstName" placeholder="@User.FirstName"></InputText>
     </div>
     <div>
         <label>Model</label>
-        <InputText @bind-Value="Admin.LastName" placeholder="@Admin.LastName"></InputText>
+        <InputText @bind-Value="User.LastName" placeholder="@User.LastName"></InputText>
     </div>
     <div>
         <label>Description</label>
-        <InputText @bind-Value="Admin.Email" placeholder="@Admin.Email"></InputText>
+        <InputText @bind-Value="User.Email" placeholder="@User.Email"></InputText>
     </div>
     <button type="submit">Edit</button>
     <button @onclick="Delete" type="button">Delete</button>
@@ -24,21 +24,21 @@
 @code {
     [Parameter]
     public int Id { get; set; }
-
-    public Admin Admin { get; set; }
+    [SupplyParameterFromForm]
+    public User User { get; set; }
    
     protected override async Task OnInitializedAsync()
     {
-        Admin = await AdminRepo.GetByIdAsync(Id);
+        User = await UserRepo.GetByIdAsync(Id);
     }
 
     public async Task Submit()
     {
-        await AdminRepo.EditAsync(Admin);
+        await UserRepo.EditAsync(User);
     }
     async Task Delete()
     {
-        await AdminRepo.DeleteAsync(Admin.Id);
+        await UserRepo.DeleteAsync(User.Id);
         NavigationManager.NavigateTo("admin/Customers");
     }
 }

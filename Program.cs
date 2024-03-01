@@ -3,6 +3,7 @@ using FribergRentals.Data.Interfaces;
 using FribergRentals.Data.Repositories;
 using FribergRentals.Data;
 using Microsoft.EntityFrameworkCore;
+using FribergRentals.Data.Models;
 
 namespace FribergRentals
 {
@@ -23,8 +24,10 @@ namespace FribergRentals
             builder.Services.AddScoped<ICustomer, CustomerRepo>();
             builder.Services.AddTransient<IOrder, OrderRepo>();
             builder.Services.AddTransient<IAdmin, AdminRepo>();
-            
-			builder.Services.AddTransient<ICategory, CategoryRepo>();
+            builder.Services.AddTransient<IUser<User>, UserRepo<User>>();
+
+
+            builder.Services.AddTransient<ICategory, CategoryRepo>();
 
 			var app = builder.Build();
 
