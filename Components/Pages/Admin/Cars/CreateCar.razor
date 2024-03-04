@@ -45,7 +45,7 @@
             <ul>
                 @foreach (var category in Categories)
                 {
-                    <input type="checkbox" @bind="Car.Categories" value="@category">@category.Name; 
+                    <input type="checkbox">@category.Name;
                 }
             </ul>
         }
@@ -65,11 +65,6 @@
 
     public List<Category> Categories { get; set; } = new List<Category>();
 
-    void addToList()
-    {
-        Car.Categories = Categories;
-    }
-
     protected override async Task OnInitializedAsync()
     {
         if (Car == null)
@@ -81,7 +76,6 @@
 
     public async Task Submit()
     {
-            addToList();
             await CarRepo.AddAsync(Car);
             NavigationManager.NavigateTo("/admin/cars");
     }

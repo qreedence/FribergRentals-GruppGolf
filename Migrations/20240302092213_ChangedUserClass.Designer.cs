@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FribergRentals.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240301114808_useronly")]
-    partial class useronly
+    [Migration("20240302092213_ChangedUserClass")]
+    partial class ChangedUserClass
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -133,6 +133,10 @@ namespace FribergRentals.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ConfirmPassword")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -143,6 +147,13 @@ namespace FribergRentals.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SessionToken")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserType")

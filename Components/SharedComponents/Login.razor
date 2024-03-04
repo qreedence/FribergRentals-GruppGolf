@@ -1,0 +1,53 @@
+﻿@inject IUser<User> UserRepo
+@inject IHttpContextAccessor HttpContextAccessor
+@using System.ComponentModel.DataAnnotations
+
+    <EditForm Model="LoginForm" OnSubmit="LogIn" FormName="LogInForm">
+        <div>
+            <label>E-Mail</label>
+            <InputText @bind-Value="LoginForm.Email"></InputText>
+        </div>
+        <div>
+            <label>Password</label>
+            <InputText type="password" @bind-Value="LoginForm.Password"></InputText>
+        </div>
+        <button type="submit">Log In</button>
+    </EditForm>
+
+
+@code {
+    public class LoginModel
+    {
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide an email address.")]
+        public string Email { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide a password")]
+        public string Password { get; set; }
+    }
+
+    [SupplyParameterFromForm]
+    public LoginModel LoginForm { get; set; } = new LoginModel();
+
+    bool isLoggedIn;
+
+    async Task LogIn()
+    {
+        HttpContext HttpContext = HttpContextAccessor.HttpContext;
+        if (!string.IsNullOrEmpty(LoginForm.Email) && !string.IsNullOrEmpty(LoginForm.Password))
+        {
+            User user = await UserRepo.ValidateUser(LoginForm.Email, LoginForm.Password);
+            if (user != null)
+            {
+                string sessionToken = Guid.NewGuid().ToString("N");
+                UserRepo.UpdateSessionToken(user, sessionToken);
+                HttpContext.Response.Cookies.Append("SessionToken", sessionToken, new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.Strict,
+                        Expires = DateTimeOffset.Now.AddMinutes(60),
+                        Path = "/"
+                    });
+            }
+        }
+    }
+}
