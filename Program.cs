@@ -4,6 +4,7 @@ using FribergRentals.Data.Repositories;
 using FribergRentals.Data;
 using Microsoft.EntityFrameworkCore;
 using FribergRentals.Data.Models;
+using FribergRentals.Utilities;
 
 namespace FribergRentals
 {
@@ -25,11 +26,12 @@ namespace FribergRentals
             builder.Services.AddTransient<IOrder, OrderRepo>();
             builder.Services.AddTransient<IAdmin, AdminRepo>();
             builder.Services.AddTransient<IUser<User>, UserRepo<User>>();
-
-
             builder.Services.AddTransient<ICategory, CategoryRepo>();
+            builder.Services.AddTransient<SessionUtilities>();
 
-			var app = builder.Build();
+            builder.Services.AddHttpContextAccessor();
+
+            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -40,6 +42,7 @@ namespace FribergRentals
             }
 
             app.UseHttpsRedirection();
+            
 
             app.UseStaticFiles();
             app.UseAntiforgery();

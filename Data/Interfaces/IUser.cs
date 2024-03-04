@@ -10,5 +10,9 @@ namespace FribergRentals.Data.Interfaces
         //public void Add (User user);  // This is not common for admin and customer and cant be inherited.
         public Task EditAsync (T user);
         public Task DeleteAsync (int id);
+
+        public Task<User> ValidateUser(string email, string password);
+        public Task UpdateSessionToken(User user, string token);
+        public Task<User> ValidateSessionToken(string token);
     }
 }

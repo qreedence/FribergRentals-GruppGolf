@@ -42,8 +42,6 @@ namespace FribergRentals.Data.Repositories
             }
         }
 
-
-
         public async Task<List<User>> GetAllAsync()
         {
            return await _applicationDbContext.Users.ToListAsync();          
@@ -55,6 +53,23 @@ namespace FribergRentals.Data.Repositories
             
         }
 
+        public async Task<User> ValidateUser(string email, string password)
+        {
+            User user = _applicationDbContext.Users.FirstOrDefault(x => x.Email == email && x.Password == password);
+            return user != null ? user : null;
+        }
+
+        public async Task UpdateSessionToken(User user, string token)
+        {
+            user.SessionToken = token;
+            await _applicationDbContext.SaveChangesAsync();
+        }
+
+        public async Task<User> ValidateSessionToken(string token)
+        {
+            User user =  _applicationDbContext.Users.FirstOrDefault(x => x.SessionToken == token);
+            return user != null ? user : null;
+        }
 
     }
 }
