@@ -25,6 +25,14 @@
                 <dd>
                 <InputText @bind-Value="Customer!.Email" />
                 </dd>
+            <dt>Password</dt>
+            <dd>
+                <InputText type="password" @bind-Value="Customer!.Password"></InputText>
+            </dd>
+            <dt>Confirm Password</dt>
+            <dd>
+                <InputText type="password" @bind-Value="Customer!.ConfirmPassword"></InputText>
+            </dd>
          </dl>
     </div>
     <div>
@@ -47,12 +55,12 @@
     public bool BackLinkVisible = false;
     protected override void OnInitialized() => Customer ??= new();
 
-    private void Submit()
+    async Task Submit()
     {
         if (Customer != null)
         {
             Customer.Id = 0;
-            CustomerRepo.AddAsync(Customer);
+            await CustomerRepo.AddAsync(Customer);
             Confirm = "User added";
         }
         else

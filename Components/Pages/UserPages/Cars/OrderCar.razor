@@ -1,0 +1,32 @@
+﻿@page "/userpages/cars/order/"
+@page "/userpages/cars/order/{id:int}"
+@inject ICar CarRepo
+@inject IUser<User> UserRepo
+@inject IOrder OrderRepo
+@inject NavigationManager NavigationManager
+
+<h3>Select Pick-up Date and Return Date</h3>
+
+<EditForm Model="Order" @onsubmit="Submit">
+    <div>
+        <label>Pick-up Date</label>
+        <InputDate @bind-Value="@Order.PickupDate"></InputDate>
+    </div>
+    <div>
+        <label>Return Date</label>
+        <InputDate @bind-Value="@Order.ReturnDate"></InputDate>
+    </div>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public Order Order { get; set; } = new Order();
+
+    async Task Submit()
+    {
+    }
+}
