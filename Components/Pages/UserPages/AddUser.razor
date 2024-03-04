@@ -42,24 +42,31 @@
 
 <p>@Confirm</p>
 
+@if(BackLinkVisible)
+{
+    <NavLink href="/" Match="@NavLinkMatch.All">Go back</NavLink>
+}
+
 @code {
     [SupplyParameterFromForm]
     public Customer Customer { get; set; }
     public string Id { get; set; }
     public string Confirm;
+    public bool BackLinkVisible = false;
     protected override void OnInitialized() => Customer ??= new();
 
-    private void Submit()
+    async Task Submit()
     {
         if (Customer != null)
         {
             Customer.Id = 0;
-            CustomerRepo.AddAsync(Customer);
+            await CustomerRepo.AddAsync(Customer);
             Confirm = "User added";
         }
         else
         {
             Confirm = "Something went wrong, try again!";
         }
+        BackLinkVisible = true;
     }
 }
