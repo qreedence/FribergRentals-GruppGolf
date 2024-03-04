@@ -1,7 +1,7 @@
 ﻿@page "/admin/cars"
 @inject ICar CarRepo
 
-<h3>Car List</h3>
+<h3>Cars</h3>
 
 <table>
     <thead>
@@ -13,12 +13,12 @@
             <th>Image URL 1</th>
             <th>Image URL 2</th>
             <th>Image URL 3</th>
-            <th colspan="2">Categories</th>
+            <th colspan="2">Categories</th> 
         </tr>
     </thead>
     <tbody>
         @{
-            if (CarList == null)
+            if (ListOfCars == null)
             {
                 <tr>
                     <td colspan="9">
@@ -26,7 +26,7 @@
                     </td>
                 </tr>
             }
-            else if (CarList.Count == 0)
+            else if (ListOfCars.Count == 0)
             {
                 <tr>
                     <td colspan="9">
@@ -36,7 +36,7 @@
             }
             else
             {
-                @foreach (var car in CarList)
+                @foreach (var car in ListOfCars)
                 {
                     <tr>
                         <td>@car.Brand</td>
@@ -47,24 +47,36 @@
                         <td>@car.ImageUrl2</td>
                         <td>@car.ImageUrl3</td>
                         <td>
-                            @*Implement Category here*@
+                            @if (car.Categories == null)
+                            {
+                                <p>No categories found.</p>
+                            }
+                            else if (car.Categories.Count > 0)
+                            {
+                                @foreach (var category in car.Categories)
+                                {
+                                    <p>@category.Name</p>
+                                }
+                            }
                         </td>
                         <td>
-                            <div>
-                            </div>
+                            <OrderButton Id="@car.Id"></OrderButton>
                         </td>
                     </tr>
                 }
             }
-        }
+         }
     </tbody>
 </table>
 
+<NavLink href="/admin/cars/create" Match="NavLinkMatch.All">Create New Car</NavLink>
+
 @code {
-    List<Car> CarList = null;
+    List<Car> ListOfCars = null;
 
     protected override async Task OnInitializedAsync()
     {
-        CarList = await CarRepo.GetAllAsync();
+        ListOfCars = await CarRepo.GetAllAsync();
     }
+
 }

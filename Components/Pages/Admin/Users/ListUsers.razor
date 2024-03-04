@@ -13,8 +13,8 @@
         </tr>
     </thead>
     <tbody>
-        @{
-            if (ListOfCustomers == null)
+        {
+            @if (ListOfUsers == null)
             {
                 <tr>
                     <td colspan="9">
@@ -22,7 +22,7 @@
                     </td>
                 </tr>
             }
-            else if (ListOfCustomers.Count == 0)
+            else if (ListOfUsers.Count == 0)
             {
                 <tr>
                     <td colspan="9">
@@ -32,14 +32,14 @@
             }
             else
             {
-                @foreach (var customer in ListOfCustomers)
+                @foreach (var user in ListOfUsers)
                 {
                     <tr>
-                        <td>@customer.FirstName</td>
-                        <td>@customer.LastName</td>
-                        <td>@customer.Email</td>
+                        <td>@user.FirstName</td>
+                        <td>@user.LastName</td>
+                        <td>@user.Email</td>
                         <td>
-                            <EditUserButton Id="@customer.Id"></EditUserButton>
+                            <EditUserButton Id="@user.Id"></EditUserButton>
                         </td>
                     </tr>
                 }
@@ -49,11 +49,11 @@
 </table>
 
 @code {
-    List<User> ListOfCustomers = null;
+    List<User> ListOfUsers = null;
 
     protected override async Task OnInitializedAsync()
     {
         
-        ListOfCustomers = await UserRepo.GetAllAsync();
+        ListOfUsers = await UserRepo.GetAllAsync();
     }
 }
