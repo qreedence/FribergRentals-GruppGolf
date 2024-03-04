@@ -1,6 +1,8 @@
 ﻿@page "/admin/cars/create"
 @inject ICar CarRepo
 @inject ICategory CategoryRepo
+@rendermode InteractiveServer
+@using Admin.Cars
 
 <h3>Add New Car</h3>
 
@@ -45,7 +47,7 @@
             <ul>
                 @foreach (var category in Categories)
                 {
-                    <input type="checkbox">@category.Name;
+                    <CategoryCheckbox Name="@category.Name" Id="category.Id" OnCategorySelection="HandleCheckboxChecked" />
                 }
             </ul>
         }
@@ -61,7 +63,6 @@
 
     [SupplyParameterFromForm]
     public Car Car { get; set; }
-    public List<int> tempId { get; set; }
 
     public List<Category> Categories { get; set; } = new List<Category>();
 
@@ -76,23 +77,20 @@
 
     public async Task Submit()
     {
-            await CarRepo.AddAsync(Car);
-            NavigationManager.NavigateTo("/admin/cars");
+        await CarRepo.AddAsync(Car);
+        NavigationManager.NavigateTo("/admin/cars");
     }
 
-    public async Task ToggleCategorySelection(MouseEventArgs e, int categoryId)
+    private void HandleCheckboxChecked(int id)
     {
-        var category = Categories.FirstOrDefault(c => c.Id == categoryId);
-        if (category != null)
+        var category = Categories.FirstOrDefault(c => c.Id == id);
+        if (!Car.Categories.Contains(category))
         {
-            if (Car.Categories.Contains(category))
-            {
-                Car.Categories.Remove(category);
-            }
-            else
-            {
-                Car.Categories.Add(category);
-            }
+            Car.Categories.Add(category);
+        }
+        else
+        {
+            Car.Categories.Remove(category);
         }
     }
 }

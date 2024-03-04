@@ -9,5 +9,6 @@ namespace FribergRentals.Data.Interfaces
 		Task Delete(int id);
 		Task <List<Category>> GetAll();
 		Task <Category> GetByIdAsync(int id);
-	}
+
+    }
 }
