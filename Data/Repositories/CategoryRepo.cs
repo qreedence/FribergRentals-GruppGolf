@@ -47,5 +47,6 @@ namespace FribergRentals.Data.Repositories
 		{
 			return await _applicationDbContext.Categories.FindAsync(id);
 		}
-	}
+
+    }
 }

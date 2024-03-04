@@ -45,7 +45,7 @@ namespace FribergRentals.Data.Repositories
 
         public async Task<Car> GetByIdAsync(int id)
         {
-            return await _applicationDbContext.Cars.FindAsync(id);
+            return await _applicationDbContext.Cars.Include(c=>c.Categories).FirstOrDefaultAsync(c=> c.Id == id);
         }
     }
 }

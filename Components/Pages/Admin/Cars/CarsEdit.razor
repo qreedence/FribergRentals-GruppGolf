@@ -37,8 +37,16 @@
         <label>Category</label>
             @foreach (var category in Categories)
             {
-            <input type="checkbox" checked="@IsCategorySelected(category)" @onclick="() => ToggleCategorySelection(category)">
-            <label>@category.Name</label>
+                <br /> //Tillfälligt för att skapa space mellan checkboxarna, annars kunde 2 bli checkade med 1 tryck
+            if (Car.Categories.Contains(category))
+            {
+                <CategoryCheckbox Name="@category.Name" Id="category.Id" IsSelected="true" OnCategorySelection="HandleCheckboxChecked" />
+            }
+            else
+            {
+                 <CategoryCheckbox Name="@category.Name" Id="category.Id" OnCategorySelection="HandleCheckboxChecked" />
+            }
+           
             }
     </div>
     <button type="submit">Save Changes</button>
@@ -56,17 +64,12 @@
 
     public List<Category> Categories { get; set; } = new List<Category>();
 
-    public List<int> SelectedCategoryIds { get; set; } = new List<int>();
-
     protected override async Task OnParametersSetAsync()
     {
         if (Id > 0)
         {
             Car = await CarRepo.GetByIdAsync(Id);
             Categories = await CategoryRepo.GetAll();
-            SelectedCategoryIds = Car.Categories != null
-            ? Car.Categories.Select(c => c.Id).ToList()
-            : new List<int>();
         }
     }
 
@@ -82,20 +85,16 @@
         NavigationManager.NavigateTo("admin/cars");
     }
 
-    public bool IsCategorySelected(Category category)
+    private void HandleCheckboxChecked(int id)
     {
-        return SelectedCategoryIds.Contains(category.Id);
-    }
-
-    void ToggleCategorySelection(Category category)
-    {
-        if (IsCategorySelected(category))
+        var category = Categories.FirstOrDefault(c => c.Id == id);
+        if (!Car.Categories.Contains(category))
         {
-            SelectedCategoryIds.Remove(category.Id);
+            Car.Categories.Add(category);
         }
         else
         {
-            SelectedCategoryIds.Add(category.Id);
+            Car.Categories.Remove(category);
         }
     }
 }
