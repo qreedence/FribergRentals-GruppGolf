@@ -20,7 +20,7 @@ namespace FribergRentals.Data.Repositories
         public async Task AddAsync(Order order)
         {
             order.Car = await _carRepo.GetByIdAsync(order.Car.Id);
-            order.User = await _userRepo.GetByIdAsync(order.User.Id);
+            order.Customer = (Customer)await _userRepo.GetByIdAsync(order.Customer.Id);
             _applicationDbContext.Orders.Add(order);
             _applicationDbContext.SaveChanges();
         }
@@ -43,7 +43,7 @@ namespace FribergRentals.Data.Repositories
             return await _applicationDbContext.Orders
                .OrderBy(x => x.Id)
                .Include(order => order.Car)
-               .Include(order => order.User)
+               .Include(order => order.Customer)
                .ToListAsync();
         }
 
@@ -51,7 +51,7 @@ namespace FribergRentals.Data.Repositories
         {
             return await _applicationDbContext.Orders
                 .Include(x => x.Car)
-                .Include(x => x.User)
+                .Include(x => x.Customer)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
     }
