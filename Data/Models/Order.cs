@@ -6,7 +6,7 @@ namespace FribergRentals.Data.Models
     public class Order : BaseDomainEntity
     {
         public Car Car { get; set; }
-        public User User { get; set; }
+        public Customer Customer { get; set; }
         public DateTime PickupDate { get; set; }
         public DateTime ReturnDate { get; set; }
         public DateTime TimeOfOrder { get; set;  }
