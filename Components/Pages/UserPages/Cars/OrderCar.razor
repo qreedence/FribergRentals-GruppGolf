@@ -77,8 +77,7 @@
             Order.Car = Car;
             Order.TimeOfOrder = DateTime.Now.Date;
             await OrderRepo.AddAsync(Order);
-            //TODO:
-            // UserRepo.AddOrderAsync(Order.User, Order);
+            await CustomerRepo.AddOrderAsync(Order.Customer, Order);
             NavigationManager.NavigateTo("/userpages/cars/order/confirmation");
         }
         else
