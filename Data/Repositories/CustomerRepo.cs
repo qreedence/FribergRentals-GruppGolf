@@ -13,9 +13,10 @@ namespace FribergRentals.Data.Repositories
             _applicationDbContext = applicationDbContext;
         }
 
-        public void AddOrder(Order order, Customer customer)
+        public async Task AddOrderAsync(Customer customer, Order order)
         {
-            throw new NotImplementedException();
+            customer.CustomerOrders.Add(order);
+            await _applicationDbContext.SaveChangesAsync(); 
         }
 
         //public void Add(Customer customer)
