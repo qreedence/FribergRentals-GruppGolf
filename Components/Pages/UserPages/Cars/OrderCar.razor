@@ -76,7 +76,7 @@
         {
             Order.Car = Car;
             Order.TimeOfOrder = DateTime.Now.Date;
-            OrderRepo.AddAsync(Order);
+            await OrderRepo.AddAsync(Order);
             //TODO:
             // UserRepo.AddOrderAsync(Order.User, Order);
             NavigationManager.NavigateTo("/userpages/cars/order/confirmation");
@@ -97,7 +97,11 @@
         else
         {
             IsValidReturnDate = true;
-            int numberOfDays = (int)(Order.ReturnDate - Order.PickupDate).TotalDays;
+            int numberOfDays = (int)(Order.ReturnDate - Order.PickupDate).Days;
+            if (numberOfDays < 1)
+            {
+                numberOfDays = 1;
+            }
             Order.TotalPrice = numberOfDays * Car.Price;
             StateHasChanged();
         }
