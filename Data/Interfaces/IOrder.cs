@@ -4,10 +4,10 @@ namespace FribergRentals.Data.Interfaces
 {
     public interface IOrder
     {
-        public Order GetById(int id);
-        public IEnumerable<Order> GetAll();
-        public void Add (Order order);
-        public void Edit (Order order);
-        public void Delete(int id);
+        public Task<Order> GetByIdAsync(int id);
+        public Task<List<Order>> GetAllAsync();
+        public Task AddAsync (Order order);
+        public Task EditAsync (Order order);
+        public Task DeleteAsync(int id);
     }
 }
