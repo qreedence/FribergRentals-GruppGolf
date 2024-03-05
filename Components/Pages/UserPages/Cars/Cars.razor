@@ -1,35 +1,16 @@
 ﻿@page "/userpages/cars"
 @inject ICar CarRepo
+@rendermode InteractiveServer
 
 <h3>Cars</h3>
 
 <table>
-    @{
-        if (ListOfCars != null)
-        {
-            if (ListOfCars.Count() > 0)
-            {
-                <thead>
-                    <tr>
-                        <th>Brand</th>
-                        <th>Model</th>
-                        <th>Description</th>
-                        <th>Price</th>
-                        <th>Image URL 1</th>
-                        <th>Image URL 2</th>
-                        <th>Image URL 3</th>
-                        <th colspan="2">Categories</th>
-                    </tr>
-                </thead>
-            }
-        }
-    }
     <tbody>
         @{
             if (ListOfCars == null)
             {
                 <tr>
-                    <td colspan="9">
+                    <td colspan="10">
                         <span>Loading...</span>
                     </td>
                 </tr>
@@ -37,7 +18,7 @@
             else if (ListOfCars.Count == 0)
             {
                 <tr>
-                    <td colspan="9">
+                    <td colspan="10">
                         <span>No cars found.</span>
                     </td>
                 </tr>
@@ -76,8 +57,6 @@
          }
     </tbody>
 </table>
-
-<NavLink href="/admin/cars/create" Match="NavLinkMatch.All">Create New Car</NavLink>
 
 @code {
     List<Car> ListOfCars = null;

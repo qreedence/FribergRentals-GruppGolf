@@ -62,21 +62,21 @@
             Customer.Id = 0;
             List<User> allUsers = await CustomerRepo.GetAllAsync();
             bool userExists = false;
-            foreach (var user in allUsers)
+            foreach(var user in allUsers)
             {
-                if (user.Email == Customer.Email)
+                if(user.Email == Customer.Email)
                 {
                     userExists = true;
                 }
             }
-            if(!userExists)
+            if (!userExists)
             {
                 await CustomerRepo.AddAsync(Customer);
                 Confirm = "User added";
             }
             else
             {
-                Confirm = "An account with that email already exists!";
+                Confirm = "An account with that email address already exists!";
             }
         }
         else
