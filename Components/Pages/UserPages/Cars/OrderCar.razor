@@ -2,7 +2,7 @@
 @page "/userpages/cars/order/{id:int}"
 
 @inject ICar CarRepo
-@inject IUser<User> UserRepo
+@inject ICustomer CustomerRepo
 @inject IOrder OrderRepo
 @inject NavigationManager NavigationManager
 @inject FribergRentals.Utilities.SessionUtilities SessionUtilities
@@ -71,8 +71,8 @@
     {
         HttpContext HttpContext = HttpContextAccessor.HttpContext;
         string sessionToken = SessionUtilities.ExtractSessionToken(HttpContext);
-        Order.User = await UserRepo.ValidateSessionToken(SessionUtilities.ExtractSessionToken(HttpContext));
-        if (Order.User != null)
+        Order.Customer = (Customer)await CustomerRepo.ValidateSessionToken(sessionToken);
+        if (Order.Customer != null && Order.Customer is Customer)
         {
             Order.Car = Car;
             Order.TimeOfOrder = DateTime.Now.Date;
