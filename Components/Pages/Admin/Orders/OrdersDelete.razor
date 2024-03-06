@@ -1,0 +1,52 @@
+﻿@page "/admin/orders/delete"
+@page "/admin/orders/delete/{id:int}"
+
+@inject IOrder OrderRepo
+
+<h3>Delete Order</h3>
+
+<EditForm Model="Order" OnSubmit="Submit" FormName="EditOrder">
+    <div>
+        <label>Car</label>
+        <p>@Order.Car</p>
+    </div>
+    <div>
+        <label>Customer</label>
+        <p>@Order.Customer</p>
+    </div>
+    <div>
+        <label>Pick-up date</label>
+        <p>@Order.PickupDate</p>
+    </div>
+    <div>
+        <label>Return date</label>
+        <p>@Order.ReturnDate</p>
+    </div>
+    <div>
+        <label>Time of order</label>
+        <p>@Order.TimeOfOrder</p>
+    </div>
+    <div>
+        <label>Price</label>
+        <p>@Order.TotalPrice</p>
+    </div>
+
+    <button type="submit">Delete</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public Order Order { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Order = await OrderRepo.GetByIdAsync(Id);
+    }
+
+    public async Task Submit()
+    {
+        await OrderRepo.DeleteAsync(Id);
+    }
+}
