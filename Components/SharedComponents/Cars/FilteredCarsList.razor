@@ -1,0 +1,70 @@
+﻿@* @page "/userpages/cars" *@
+@inject ICar CarRepo
+@rendermode InteractiveServer
+
+<h3>Cars</h3>
+
+<table>
+    <tbody>
+        @{
+            if (ListOfCars == null)
+            {
+                <tr>
+                    <td colspan="10">
+                        <span>Loading...</span>
+                    </td>
+                </tr>
+            }
+            else if (ListOfCars.Count == 0)
+            {
+                <tr>
+                    <td colspan="10">
+                        <span>No cars found.</span>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var car in ListOfCars)
+                {
+                    <tr>
+                        <td>@car.Brand</td>
+                        <td>@car.Model</td>
+                        <td>@car.Description</td>
+                        <td>@car.Price</td>
+                        <td><img src="@car.ImageUrl1" /></td>
+                        <td>@car.ImageUrl2</td>
+                        <td>@car.ImageUrl3</td>
+                        <td>
+                            @if (car.Categories == null)
+                            {
+                                <p>No categories found.</p>
+                            }
+                            else if (car.Categories.Count > 0)
+                            {
+                                @foreach (var category in car.Categories)
+                                {
+                                    <p>@category.Name</p>
+                                }
+                            }
+                        </td>
+                        <td>
+                            <OrderButton Id="@car.Id"></OrderButton>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public List<Car> ListOfCars { get; set; }
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     ListOfCars = await CarRepo.GetAllAsync();
+    // }
+
+}

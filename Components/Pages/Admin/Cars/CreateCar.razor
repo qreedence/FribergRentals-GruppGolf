@@ -1,0 +1,92 @@
+﻿@page "/admin/cars/create"
+
+@rendermode InteractiveServer
+
+<h3>Add New Car</h3>
+
+<EditForm Model="Car" OnSubmit="Submit" FormName="CreateCar">
+    <div>
+        <label>Brand</label>
+        <InputText @bind-Value="Car.Brand"></InputText>
+    </div>
+    <div>
+        <label>Model</label>
+        <InputText @bind-Value="Car.Model"></InputText>
+    </div>
+    <div>
+        <label>Description</label>
+        <InputText @bind-Value="Car.Description"></InputText>
+    </div>
+    <div>
+        <label>Price</label>
+        <InputNumber @bind-Value="Car.Price"></InputNumber>
+    </div>
+    <div>
+        <label>Image URLs (Optional)</label>
+        <label>Image URL 1</label>
+        <InputText @bind-Value="Car.ImageUrl1"></InputText>
+        <label>Image URL 2</label>
+        <InputText @bind-Value="Car.ImageUrl2"></InputText>
+        <label>Image URL 3</label>
+        <InputText @bind-Value="Car.ImageUrl3"></InputText>
+    </div>
+    <div>
+        <label>Categories</label>
+        @if (Categories == null)
+        {
+            <p>Loading..</p>
+        }
+        else if (Categories.Count == 0)
+        {
+            <p>No categories found.</p>
+        } 
+        else
+        {
+            <ul>
+                @foreach (var category in Categories)
+                {
+                    <CategoryCheckbox Name="@category.Name" Id="category.Id" OnCategorySelection="HandleCheckboxChecked" />
+                }
+            </ul>
+        }
+    </div>
+
+
+    <button type="submit">Create</button>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    public Car Car { get; set; }
+
+    public List<Category> Categories { get; set; } = new List<Category>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Car == null)
+        {
+            Car = new Car { Categories = new List<Category>() };
+        }
+        Categories = await CategoryRepo.GetAll();
+    }
+
+    public async Task Submit()
+    {
+        await CarRepo.AddAsync(Car);
+        NavigationManager.NavigateTo("/admin/cars");
+    }
+
+    private void HandleCheckboxChecked(int id)
+    {
+        var category = Categories.FirstOrDefault(c => c.Id == id);
+        if (!Car.Categories.Contains(category))
+        {
+            Car.Categories.Add(category);
+        }
+        else
+        {
+            Car.Categories.Remove(category);
+        }
+    }
+}
+

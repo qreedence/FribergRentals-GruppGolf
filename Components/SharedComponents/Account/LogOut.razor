@@ -1,0 +1,34 @@
+﻿@inject IUser<User> UserRepo
+@inject IHttpContextAccessor HttpContextAccessor
+@inject FribergRentals.Utilities.SessionUtilities SessionUtilities
+@inject NavigationManager NavigationManager
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
+<EditForm Model="LogOutFormModel" FormName="LogOutForm" OnValidSubmit="LogOutUser">
+    <button type="submit">Log Out</button>
+</EditForm>
+
+
+@code {
+
+    public class LogOutForm{}
+    private LogOutForm LogOutFormModel = new LogOutForm(); 
+
+    async Task LogOutUser()
+    {
+        HttpContext HttpContext = HttpContextAccessor.HttpContext;
+        if (!HttpContext.Response.HasStarted)
+        {
+            if (HttpContext != null && HttpContext.Request.Cookies.TryGetValue("SessionToken", out string? sessionToken))
+            {
+                User user = await UserRepo.ValidateSessionToken(sessionToken);
+                if (user != null)
+                {
+                    HttpContext.Response.Cookies.Delete("SessionToken");
+                    await UserRepo.UpdateSessionToken(user, null);
+                    NavigationManager.NavigateTo("/");
+                }
+            }
+        }
+    }
+}

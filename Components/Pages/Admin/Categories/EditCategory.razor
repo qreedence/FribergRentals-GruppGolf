@@ -1,0 +1,62 @@
+﻿@page "/admin/categories/edit"
+@page "/admin/categories/edit/{id:int}"
+
+@rendermode InteractiveServer
+
+@if (Id == null)
+{
+	<h3>Create Category</h3>
+}
+else
+{
+	<h3>Edit Category</h3>
+}
+
+<EditForm Model="category" OnSubmit="HandleSubmit" FormName="editCategory">
+	<label>Name</label>
+	<InputText @bind-Value="category.Name">@category.Name</InputText>
+		<div>
+			<button type="submit">Submit</button>
+			@if (Id != null)
+		{
+			<button @onclick="DeleteCategory" type="button">Delete</button>
+		}
+	</div>
+
+</EditForm>
+
+
+@code {
+	[Parameter]
+	public int? Id { get; set; }
+	[SupplyParameterFromForm]
+	Category category { get; set; } = new Category();
+
+	protected override async Task OnParametersSetAsync()
+	{
+		if (Id != null)
+		{
+			category = await CategoryRepo.GetByIdAsync((int)Id);
+		}
+
+	}
+
+	async Task HandleSubmit()
+	{
+		if (Id == null)
+		{
+			await CategoryRepo.Add(category);
+		}
+		else
+		{
+			await CategoryRepo.Edit(category);
+		}
+		NavigationManager.NavigateTo("/category");
+	}
+
+	async Task DeleteCategory()
+	{
+		await CategoryRepo.Delete((int)Id);
+		NavigationManager.NavigateTo("/category");
+	}
+}

@@ -1,0 +1,25 @@
+﻿@rendermode InteractiveServer
+
+<button @onclick="EditUser">Edit</button>
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public User User { get; set; }
+    async Task EditUser()
+    {
+        User = await UserRepo.GetByIdAsync(Id);
+        if (User != null)
+        {
+            NavigationManager.NavigateTo($"admin/Users/edituser/{Id}");
+        }
+   
+        else
+        {
+            NavigationManager.NavigateTo($"/");
+        }
+
+        
+
+    }
+}

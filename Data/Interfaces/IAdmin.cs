@@ -1,6 +1,8 @@
-﻿namespace FribergRentals.Data.Interfaces
+﻿using FribergRentals.Data.Models;
+
+namespace FribergRentals.Data.Interfaces
 {
-    public interface IAdmin : IUser
+    public interface IAdmin : IUser<Admin> 
     {
     }
 }

@@ -2,8 +2,8 @@
 
 namespace FribergRentals.Data.Interfaces
 {
-    public interface ICustomer : IUser
+    public interface ICustomer : IUser<Customer>
     {
-        public void AddOrder(Order order, Customer customer);
+        public Task AddOrderAsync(Customer customer, Order order);
     }
 }

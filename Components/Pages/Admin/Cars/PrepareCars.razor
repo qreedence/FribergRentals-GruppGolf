@@ -1,0 +1,80 @@
+﻿@page "/admin/cars/prepare"
+@inject IOrder OrderRepo
+@rendermode InteractiveServer
+<h3>PrepareCars</h3>
+
+<div>
+    <label>Pick-up Date</label>
+    <InputDate @bind-Value="Order.PickupDate"></InputDate>
+    <button @onclick="Confirm" type="button">Confirm</button>
+</div>
+@if (ReadyCarList == null)
+{
+    <tr>
+        <td colspan="9">
+            <span>Loading...</span>
+        </td>
+    </tr>
+}
+else if (ReadyCarList.Count == 0)
+{
+    <tr>
+        <td colspan="9">
+            <span>No cars ready.</span>
+        </td>
+    </tr>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>ImageUrl1</th>
+                <th>Pickup Date</th>
+                <th>Pickup Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in ReadyCarList)
+            {
+                <tr>
+                    <td>@order.Car.Brand</td>
+                    <td>@order.Car.Model</td>
+                    <td>@order.Car.Description</td>
+                    <td>@order.Car.Price</td>
+                    <td>@order.Car.ImageUrl1</td>
+                    <td>@DateOnly.FromDateTime(order.PickupDate)</td>
+                    <td>@TimeOnly.FromDateTime(order.PickupDate)</td>
+                    <td>
+                        <EditCarButton Id="@order.Id"></EditCarButton>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
+
+@code {
+    public Order Order { get; set; } = new Order();
+    public List<Order> Orders { get; set; } = new List<Order>();
+    public List<Order> ReadyCarList { get; set; } = new List<Order>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Order.PickupDate = DateTime.Now;
+        await Confirm();
+    }
+    private async Task Confirm()
+    {
+        Orders = await OrderRepo.GetAllAsync();
+        ReadyCarList = Orders.Where(o => o.PickupDate.Date == Order.PickupDate.Date).ToList();
+             
+    }
+}

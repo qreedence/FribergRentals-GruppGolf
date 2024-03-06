@@ -4,10 +4,10 @@ namespace FribergRentals.Data.Interfaces
 {
     public interface ICar
     {
-        public Car GetById(int id);
-        public IEnumerable<Car> GetAll();
-        public void Add(Car car);
-        public void Edit(Car car);
-        public void Delete(int id);
+        Task<Car> GetByIdAsync(int id);
+        public Task<List<Car>> GetAllAsync();
+        public Task AddAsync(Car car);
+        public Task EditAsync(Car car);
+        public Task DeleteAsync(int id);
     }
 }

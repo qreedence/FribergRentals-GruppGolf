@@ -3,6 +3,8 @@ using FribergRentals.Data.Interfaces;
 using FribergRentals.Data.Repositories;
 using FribergRentals.Data;
 using Microsoft.EntityFrameworkCore;
+using FribergRentals.Data.Models;
+using FribergRentals.Utilities;
 
 namespace FribergRentals
 {
@@ -20,10 +22,14 @@ namespace FribergRentals
                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
 
             builder.Services.AddTransient<ICar, CarRepo>();
-            builder.Services.AddTransient<ICustomer, CustomerRepo>();
+            builder.Services.AddScoped<ICustomer, CustomerRepo>();
             builder.Services.AddTransient<IOrder, OrderRepo>();
             builder.Services.AddTransient<IAdmin, AdminRepo>();
-            builder.Services.AddTransient<IUser, UserRepo>();
+            builder.Services.AddTransient<IUser<User>, UserRepo<User>>();
+            builder.Services.AddTransient<ICategory, CategoryRepo>();
+            builder.Services.AddTransient<SessionUtilities>();
+
+            builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
 
@@ -36,6 +42,7 @@ namespace FribergRentals
             }
 
             app.UseHttpsRedirection();
+            
 
             app.UseStaticFiles();
             app.UseAntiforgery();

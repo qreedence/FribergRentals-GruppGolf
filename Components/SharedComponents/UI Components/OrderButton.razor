@@ -1,0 +1,11 @@
+﻿<button @onclick="NavigateToOrder">Book This Car</button>
+
+@code {
+	[Parameter]
+	public int Id { get; set; }
+
+	void NavigateToOrder()
+	{
+		NavigationManager.NavigateTo($"/userpages/cars/order/{Id}");
+	}
+}

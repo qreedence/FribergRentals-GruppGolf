@@ -1,0 +1,42 @@
+﻿@page "/admin/categories"
+@using FribergRentals.Data.Models
+
+@rendermode InteractiveServer
+
+<h3>CategoryList</h3>
+
+@if (categories == null)
+{
+	<span>No Categories</span>
+}
+else if (categories.Count == 0)
+{
+	<span>No Categories</span>
+}
+else
+{
+	<ul>
+		@foreach (var category in categories)
+		{
+			<li>@category.Name <EditCategoryButton Id="category.Id" /></li>
+		}
+	</ul>
+
+}
+
+<button @onclick="CreateCategory">Create New</button>
+
+@code {
+
+	List<Category>? categories = null;
+
+	protected override async Task OnInitializedAsync()
+	{
+		categories = await CategoryRepo.GetAll();
+	}
+
+	void CreateCategory()
+	{
+		NavigationManager.NavigateTo("category/edit/");
+	}
+}

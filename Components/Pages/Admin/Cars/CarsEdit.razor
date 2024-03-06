@@ -1,0 +1,98 @@
+﻿@page "/admin/cars/edit"
+@page "/admin/cars/edit/{id:int}"
+
+@rendermode InteractiveServer
+
+<h3>Edit Car</h3>
+
+<EditForm Model="Car" OnSubmit="Submit" FormName="EditCar">
+    <div>
+        <label>Brand</label>
+        <InputText @bind-Value="Car.Brand">@Car.Brand</InputText>
+    </div>
+    <div>
+        <label>Model</label>
+        <InputText @bind-Value="Car.Model">@Car.Model</InputText>
+    </div>
+    <div>
+        <label>Description</label>
+        <InputText @bind-Value="Car.Description">@Car.Description</InputText>
+    </div>
+    <div>
+        <label>Price</label>
+        <InputNumber @bind-Value="Car.Price" placeholder="@Car.Price"></InputNumber>
+    </div>
+    <div>
+        <label>Image URLs (Optional)</label>
+        <label>Image URL 1</label>
+        <InputText @bind-Value="Car.ImageUrl1" placeholder="@Car.ImageUrl1"></InputText>
+        <label>Image URL 2</label>
+        <InputText @bind-Value="Car.ImageUrl2" placeholder="@Car.ImageUrl2"></InputText>
+        <label>Image URL 3</label>
+        <InputText @bind-Value="Car.ImageUrl3" placeholder="@Car.ImageUrl3"></InputText>
+    </div>
+    <div>
+        <label>Category</label>
+            @foreach (var category in Categories)
+            {
+                <br /> //Tillfälligt för att skapa space mellan checkboxarna, annars kunde 2 bli checkade med 1 tryck
+            if (Car.Categories.Contains(category))
+            {
+                <CategoryCheckbox Name="@category.Name" Id="category.Id" IsSelected="true" OnCategorySelection="HandleCheckboxChecked" />
+            }
+            else
+            {
+                 <CategoryCheckbox Name="@category.Name" Id="category.Id" OnCategorySelection="HandleCheckboxChecked" />
+            }
+           
+            }
+    </div>
+    <button type="submit">Save Changes</button>
+    <button @onclick="Delete" type="button">Delete</button>
+</EditForm>
+
+<NavLink href="admin/cars" Match="NavLinkMatch.All">Back</NavLink>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public Car Car { get; set; } = new Car();
+
+    public List<Category> Categories { get; set; } = new List<Category>();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id > 0)
+        {
+            Car = await CarRepo.GetByIdAsync(Id);
+            Categories = await CategoryRepo.GetAll();
+        }
+    }
+
+    async Task Submit()
+    {
+        await CarRepo.EditAsync(Car);
+        NavigationManager.NavigateTo("/admin/cars");
+    }
+
+    async Task Delete()
+    {
+        await CarRepo.DeleteAsync(Car.Id);
+        NavigationManager.NavigateTo("admin/cars");
+    }
+
+    private void HandleCheckboxChecked(int id)
+    {
+        var category = Categories.FirstOrDefault(c => c.Id == id);
+        if (!Car.Categories.Contains(category))
+        {
+            Car.Categories.Add(category);
+        }
+        else
+        {
+            Car.Categories.Remove(category);
+        }
+    }
+}

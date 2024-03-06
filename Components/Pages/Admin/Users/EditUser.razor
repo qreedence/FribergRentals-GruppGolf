@@ -1,0 +1,73 @@
+﻿@page "/admin/users/edit"
+@page "/admin/users/edit/{id:int}"
+
+@rendermode InteractiveServer
+
+<h3>EditUser</h3>
+<EditForm Model="UserModell" OnSubmit="Submit" FormName="EditUser">
+    <div>
+        <label>Firstname</label>
+        <InputText @bind-Value="UserModell.FirstName" placeholder="@UserModell.FirstName"></InputText>
+    </div>
+    <div>
+        <label>Model</label>
+        <InputText @bind-Value="UserModell.LastName" placeholder="@UserModell.LastName"></InputText>
+    </div>
+    <div>
+        <label>Description</label>
+        <InputText @bind-Value="UserModell.Email" placeholder="@UserModell.Email"></InputText>
+    </div>
+    <button type="submit">Edit</button>
+    <button @onclick="Delete" type="button">Delete</button>
+</EditForm>
+@code {
+
+    public class UserModel {
+        public int id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
+    }
+
+    public UserModel UserModell { get; set; } = new UserModel();
+    [Parameter]
+    public int Id { get; set; }
+    [SupplyParameterFromForm]
+    public User User { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        User = await UserRepo.GetByIdAsync(Id);
+        UserModell.id = User.Id;
+        UserModell.FirstName = User.FirstName;
+        UserModell.LastName = User.LastName;
+        UserModell.Email = User.Email;
+        UserModell.Password = User.Password;
+        UserModell.ConfirmPassword = User.ConfirmPassword;
+    }
+
+    public async Task Submit()
+    {
+        User.Id = UserModell.id;
+        User.FirstName = UserModell.FirstName;
+        User.LastName = UserModell.LastName;
+        User.Email = UserModell.Email;
+        User.Password = UserModell.Password;
+        User.ConfirmPassword = UserModell.ConfirmPassword;
+        await UserRepo.EditAsync(User);
+        
+    }
+    async Task Delete()
+    {
+        User.Id = UserModell.id;
+        User.FirstName = UserModell.FirstName;
+        User.LastName = UserModell.LastName;
+        User.Email = UserModell.Email;
+        User.Password = UserModell.Password;
+        User.ConfirmPassword = UserModell.ConfirmPassword;
+        await UserRepo.DeleteAsync(User.Id);
+        NavigationManager.NavigateTo("/Customers");
+    }
+}

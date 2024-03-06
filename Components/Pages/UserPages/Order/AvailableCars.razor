@@ -1,0 +1,103 @@
+﻿@page "/search"
+@inject ICategory CategoryRepo
+@inject IOrder OrderRepo
+@inject ICar CarRepo
+@rendermode InteractiveServer
+
+<label for="pickup">Pickup Date:</label>
+<input type="datetime-local" @bind-value="@PickupDate" id="from" />
+
+<label for="return">Return Date:</label>
+<input type="datetime-local" @bind-value="@ReturnDate" id="from" />
+
+<button @onclick="AddToFiltered">Search</button>
+<br />
+
+@foreach (Category category in AllCategories)
+{
+	<CategoryCheckbox Name="@category.Name" Id="category.Id" OnCategorySelection="HandleCheckboxChecked" />
+}
+
+<FilteredCarsList ListOfCars="FilteredCars"></FilteredCarsList>
+
+
+@code {
+	public DateTime PickupDate { get; set; }
+	public DateTime ReturnDate { get; set; }
+	public List<Category> AllCategories { get; set; } = new List<Category>();
+
+	public List<Category> SelectedCategories { get; set; } = new List<Category>();
+	public List<Car> FilteredCars { get; set; } = new List<Car>();
+	public List<Order> Orders { get; set; } = new List<Order>();
+
+	protected override async Task OnInitializedAsync()
+	{
+		AllCategories = await CategoryRepo.GetAll();
+		FilteredCars = await CarRepo.GetAllAsync();
+		Orders = await OrderRepo.GetAllAsync();
+		PickupDate = DateTime.Now.Date;
+		ReturnDate = DateTime.Now.Date;
+	}
+
+	private void HandleCheckboxChecked(int id)
+	{
+		var category = AllCategories.FirstOrDefault(c => c.Id == id);
+		if (!SelectedCategories.Contains(category))
+		{
+			SelectedCategories.Add(category);
+		}
+		else
+		{
+			SelectedCategories.Remove(category);
+		}
+	}
+
+	private async void AddToFiltered()
+	{
+		bool isSelected = false;
+		List<Car> ToBeRemoved = new List<Car>();
+		FilteredCars = await CarRepo.GetAllAsync();
+
+
+		if (SelectedCategories.Count > 0)
+		{
+			foreach (Car car in FilteredCars)
+			{
+				isSelected = false;
+				for (int i = 0; i < SelectedCategories.Count; i++)
+				{					
+					if (car.Categories.Contains(SelectedCategories[i]))
+					{
+						isSelected = true;
+					}
+				}
+				if (isSelected == false)
+				{
+					ToBeRemoved.Add(car);
+				}
+			}
+			foreach (Car car in ToBeRemoved)
+			{
+				FilteredCars.Remove(car);
+			}
+		}
+
+		foreach (Order order in Orders)
+		{
+			if (ReturnDate < order.PickupDate && PickupDate < order.PickupDate || ReturnDate > order.PickupDate && PickupDate > order.PickupDate)
+			{
+
+			}
+			else
+			{
+				if (FilteredCars.Contains(order.Car))
+				{
+					FilteredCars.Remove(order.Car);
+				}
+			}
+		}
+
+		StateHasChanged();
+	}
+
+}
