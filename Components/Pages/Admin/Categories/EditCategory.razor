@@ -51,12 +51,12 @@ else
 		{
 			await CategoryRepo.Edit(category);
 		}
-		NavigationManager.NavigateTo("/category");
+		NavigationManager.NavigateTo("admin/categories");
 	}
 
 	async Task DeleteCategory()
 	{
 		await CategoryRepo.Delete((int)Id);
-		NavigationManager.NavigateTo("/category");
+		NavigationManager.NavigateTo("admin/categories");
 	}
 }
