@@ -1,5 +1,12 @@
-﻿@page "/userpages/cars/order/"
-@page "/userpages/cars/order/{id:int}"
+﻿@page "/cars/order/"
+@page "/cars/order/{id:int}"
+
+@inject ICar CarRepo
+@inject ICustomer CustomerRepo
+@inject IOrder OrderRepo
+@inject NavigationManager NavigationManager
+@inject FribergRentals.Utilities.SessionUtilities SessionUtilities
+@inject IHttpContextAccessor HttpContextAccessor
 
 @rendermode InteractiveServer
 

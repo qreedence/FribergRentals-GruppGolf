@@ -3,8 +3,6 @@
 @inject IOrder OrderRepo
 @inject ICar CarRepo
 @rendermode InteractiveServer
-@using FribergRentals.Components.Pages.Admin.Cars
-@using FribergRentals.Components.Pages.UserPages.Cars
 
 <label for="pickup">Pickup Date:</label>
 <input type="datetime-local" @bind-value="@PickupDate" id="from" />
