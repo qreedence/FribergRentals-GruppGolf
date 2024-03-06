@@ -1,21 +1,28 @@
 ﻿@page "/admin/cars"
-@inject ICar CarRepo
 
 <h3>Cars</h3>
 
 <table>
-    <thead>
-        <tr>
-            <th>Brand</th>
-            <th>Model</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Image URL 1</th>
-            <th>Image URL 2</th>
-            <th>Image URL 3</th>
-            <th colspan="2">Categories</th> 
-        </tr>
-    </thead>
+    @{
+        if (ListOfCars != null)
+        {
+            if (ListOfCars.Count() > 0)
+            {
+                <thead>
+                    <tr>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Image URL 1</th>
+                        <th>Image URL 2</th>
+                        <th>Image URL 3</th>
+                        <th colspan="2">Categories</th>
+                    </tr>
+                </thead>
+            }
+        }
+    }
     <tbody>
         @{
             if (ListOfCars == null)

@@ -1,5 +1,6 @@
 ﻿@inject IUser<User> UserRepo
 @inject IHttpContextAccessor HttpContextAccessor
+@inject NavigationManager NavigationManager
 @using System.ComponentModel.DataAnnotations
 
     <EditForm Model="LoginForm" OnSubmit="LogIn" FormName="LogInForm">
@@ -47,6 +48,7 @@
                         Expires = DateTimeOffset.Now.AddMinutes(60),
                         Path = "/"
                     });
+                    NavigationManager.NavigateTo("/");
             }
         }
     }

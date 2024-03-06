@@ -1,0 +1,65 @@
+﻿@page "/admin/orders/edit"
+@page "/admin/orders/edit/{id:int}"
+@inject IOrder OrderRepo
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<h3>Edit Order</h3>
+
+<EditForm Model="Order" OnSubmit="Submit" FormName="EditOrder">
+    
+    @*<div>
+    <label>Car</label>
+    <InputText @bind-Value="Order.Car" placeholder="@Order.Car"></InputText>
+    </div>
+    <div>
+    <label>Customer</label>
+    <InputText @bind-Value="Order.Customer" placeholder="@Order.Customer"></InputText>
+    </div>*@
+    
+    <div>
+        <label>Pick-up date</label>
+        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.PickupDate"></InputDate>
+    </div>
+    <div>
+        <label>Return date</label>
+        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.ReturnDate"></InputDate>
+    </div>
+    <div>
+        <label>Price</label>
+        <InputNumber @bind-Value="Order.TotalPrice" placeholder="@Order.TotalPrice"></InputNumber>
+    </div>
+
+    <button type="submit">Save Changes</button>
+    <button @onclick="Delete" type="button">Delete</button>
+</EditForm>
+
+<NavLink href="admin/orders" Match="NavLinkMatch.All">Back</NavLink>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public Order Order { get; set; } = new Order();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id > 0)
+        {
+            Order = await OrderRepo.GetByIdAsync(Id);
+        }
+    }
+
+    async Task Submit()
+    {
+        await OrderRepo.EditAsync(Order);
+        NavigationManager.NavigateTo("/admin/orders");
+    }
+
+    async Task Delete()
+    {
+        await OrderRepo.DeleteAsync(Order.Id);
+        NavigationManager.NavigateTo("admin/orders");
+    }
+}
