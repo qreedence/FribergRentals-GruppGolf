@@ -49,7 +49,7 @@
                             }
                         </td>
                         <td>
-                            <OrderButton Id="@car.Id"></OrderButton>
+                            <OrderButton PickupDate="@PickupDateToOrder" ReturnDate="@ReturnDateToOrder" Id="@car.Id"></OrderButton>
                         </td>
                     </tr>
                 }
@@ -61,6 +61,12 @@
 @code {
     [Parameter]
     public List<Car> ListOfCars { get; set; }
+
+    [Parameter]
+    public DateTime PickupDateToOrder { get; set; }
+
+    [Parameter]
+    public DateTime ReturnDateToOrder { get; set; }
 
     // protected override async Task OnInitializedAsync()
     // {
