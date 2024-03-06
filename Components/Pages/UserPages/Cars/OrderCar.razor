@@ -1,13 +1,6 @@
 ﻿@page "/userpages/cars/order/"
 @page "/userpages/cars/order/{id:int}"
 
-@inject ICar CarRepo
-@inject ICustomer CustomerRepo
-@inject IOrder OrderRepo
-@inject NavigationManager NavigationManager
-@inject FribergRentals.Utilities.SessionUtilities SessionUtilities
-@inject IHttpContextAccessor HttpContextAccessor
-
 @rendermode InteractiveServer
 
 <h3>Select Pick-up Date and Return Date</h3>
@@ -76,9 +69,8 @@
         {
             Order.Car = Car;
             Order.TimeOfOrder = DateTime.Now.Date;
-            OrderRepo.AddAsync(Order);
-            //TODO:
-            // UserRepo.AddOrderAsync(Order.User, Order);
+            await OrderRepo.AddAsync(Order);
+            await CustomerRepo.AddOrderAsync(Order.Customer, Order);
             NavigationManager.NavigateTo("/userpages/cars/order/confirmation");
         }
         else
@@ -97,7 +89,11 @@
         else
         {
             IsValidReturnDate = true;
-            int numberOfDays = (int)(Order.ReturnDate - Order.PickupDate).TotalDays;
+            int numberOfDays = (int)(Order.ReturnDate - Order.PickupDate).Days;
+            if (numberOfDays < 1)
+            {
+                numberOfDays = 1;
+            }
             Order.TotalPrice = numberOfDays * Car.Price;
             StateHasChanged();
         }
