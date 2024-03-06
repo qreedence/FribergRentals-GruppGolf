@@ -1,9 +1,6 @@
 ﻿@page "/admin/users/edituser"
 @page "/admin/users/edituser/{id:int}"
-@inject IUser<User> UserRepo
-@inject IAdmin AdminRepo
-@inject ICustomer CustomerRepo
-@inject NavigationManager NavigationManager
+
 @rendermode InteractiveServer
 
 <h3>EditUser</h3>
@@ -39,10 +36,6 @@
     public int Id { get; set; }
     [SupplyParameterFromForm]
     public User User { get; set; }
-
-
-
-
 
     protected override async Task OnInitializedAsync()
     {

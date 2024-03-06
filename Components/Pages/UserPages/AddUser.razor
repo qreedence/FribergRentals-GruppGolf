@@ -3,9 +3,6 @@
 @using FribergRentals.Data.Models
 @using FribergRentals.Data.Interfaces
 
-@inject ICustomer CustomerRepo
-@inject NavigationManager NavManager
-
 <h3>Add a new user</h3>
 
 <EditForm Model="Customer" OnSubmit="Submit" FormName="new-user-form">
