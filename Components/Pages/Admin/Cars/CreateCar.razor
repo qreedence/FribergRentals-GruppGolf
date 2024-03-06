@@ -1,8 +1,6 @@
 ﻿@page "/admin/cars/create"
-@inject ICar CarRepo
-@inject ICategory CategoryRepo
+
 @rendermode InteractiveServer
-@using Admin.Cars
 
 <h3>Add New Car</h3>
 
@@ -58,9 +56,6 @@
 </EditForm>
 
 @code {
-    [Inject]
-    public NavigationManager NavigationManager { get; set; }
-
     [SupplyParameterFromForm]
     public Car Car { get; set; }
 

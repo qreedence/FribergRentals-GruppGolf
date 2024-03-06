@@ -1,8 +1,6 @@
 ﻿@page "/admin/cars/delete"
 @page "/admin/cars/delete/{id:int}"
 
-@inject ICar CarRepo
-
 <h3>Delete Car</h3>
 
 <EditForm Model="Car" OnSubmit="Submit" FormName="EditCar">

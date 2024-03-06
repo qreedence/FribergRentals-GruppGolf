@@ -1,13 +1,6 @@
 ﻿@page "/userpages/cars/order/"
 @page "/userpages/cars/order/{id:int}"
 
-@inject ICar CarRepo
-@inject ICustomer CustomerRepo
-@inject IOrder OrderRepo
-@inject NavigationManager NavigationManager
-@inject FribergRentals.Utilities.SessionUtilities SessionUtilities
-@inject IHttpContextAccessor HttpContextAccessor
-
 @rendermode InteractiveServer
 
 <h3>Select Pick-up Date and Return Date</h3>

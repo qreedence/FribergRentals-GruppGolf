@@ -11,3 +11,16 @@
 @using FribergRentals.Data.Interfaces
 @using FribergRentals.Data.Models
 @using FribergRentals.Components.SharedComponents
+
+@inject ICar CarRepo
+@inject ICategory CategoryRepo
+@inject IUser<User> UserRepo
+@inject ICustomer CustomerRepo
+@inject IOrder OrderRepo
+@inject FribergRentals.Utilities.SessionUtilities SessionUtilities
+@inject IHttpContextAccessor HttpContextAccessor
+@inject IAdmin AdminRepo
+
+@inject NavigationManager NavigationManager
+@inject NavigationManager NavManager
+
