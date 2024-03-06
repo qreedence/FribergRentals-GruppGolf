@@ -1,4 +1,5 @@
-﻿@page "/userpages/cars"
+﻿@* @page "/userpages/cars" *@
+@inject ICar CarRepo
 @rendermode InteractiveServer
 
 <h3>Cars</h3>
@@ -53,16 +54,17 @@
                     </tr>
                 }
             }
-         }
+        }
     </tbody>
 </table>
 
 @code {
-    List<Car> ListOfCars = null;
+    [Parameter]
+    public List<Car> ListOfCars { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        ListOfCars = await CarRepo.GetAllAsync();
-    }
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     ListOfCars = await CarRepo.GetAllAsync();
+    // }
 
 }
