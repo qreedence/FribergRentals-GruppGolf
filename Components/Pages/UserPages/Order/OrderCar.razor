@@ -1,5 +1,5 @@
 ﻿@page "/cars/order/"
-@page "/cars/order/{id:int}"
+@page "/cars/order/{id:int}/{PickupDate}/{ReturnDate}"
 
 @inject ICar CarRepo
 @inject ICustomer CustomerRepo
@@ -15,14 +15,13 @@
 <EditForm Model="Order" OnSubmit="Submit" FormName="Make-Order">
     <div>
         <label>Pick-up Date</label>
-        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.PickupDate" @bind-Value:after="UpdatePrice">
-
+        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.PickupDate" @bind-Value:after="UpdatePrice" readonly>
         </InputDate>
 
     </div>
     <div>
         <label>Return Date</label>
-        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.ReturnDate" @bind-Value:after="@UpdatePrice">
+        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.ReturnDate" @bind-Value:after="@UpdatePrice" readonly>
     </InputDate>
     </div>
     <p>
@@ -50,6 +49,12 @@
     [Parameter]
     public int Id { get; set; }
 
+    [Parameter]
+    public string PickupDate { get; set; }
+
+    [Parameter]
+    public string ReturnDate { get; set; }
+
     [SupplyParameterFromForm]
     public Order Order { get; set; } = new Order();
 
@@ -62,8 +67,8 @@
     protected override async Task OnInitializedAsync()
     {
         Car = await CarRepo.GetByIdAsync(Id);
-        Order.PickupDate = DateTime.Now;
-        Order.ReturnDate = DateTime.Now;
+        Order.PickupDate = DateTime.Parse(PickupDate);
+        Order.ReturnDate = DateTime.Parse(ReturnDate);
         IsLoggedIn = true;
     }
 

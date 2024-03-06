@@ -1,11 +1,21 @@
-﻿<button @onclick="NavigateToOrder">Book This Car</button>
+﻿@inject IHttpContextAccessor HttpContextAccessor
+
+<button @onclick="NavigateToOrder">Book This Car</button>
 
 @code {
 	[Parameter]
 	public int Id { get; set; }
 
+	[Parameter]
+	public DateTime PickupDate { get; set; }
+
+	[Parameter]
+	public DateTime ReturnDate { get; set; }
+
 	void NavigateToOrder()
 	{
-		NavigationManager.NavigateTo($"/userpages/cars/order/{Id}");
+		string pickupDate = PickupDate.ToString("yyyy-MM-ddTHH:mm");
+		string returnDate = ReturnDate.ToString("yyyy-MM-ddTHH:mm");
+		NavigationManager.NavigateTo($"/cars/order/{Id}/{pickupDate}/{returnDate}");
 	}
 }

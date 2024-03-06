@@ -18,7 +18,7 @@
 	<CategoryCheckbox Name="@category.Name" Id="category.Id" OnCategorySelection="HandleCheckboxChecked" />
 }
 
-<FilteredCarsList ListOfCars="FilteredCars"></FilteredCarsList>
+<FilteredCarsList PickupDateToOrder="@PickupDate" ReturnDateToOrder="@ReturnDate" ListOfCars="FilteredCars"></FilteredCarsList>
 
 
 @code {
