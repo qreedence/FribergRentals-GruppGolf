@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FribergRentals.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240304190245_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240305114759_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -104,7 +104,7 @@ namespace FribergRentals.Migrations
                     b.Property<int>("CarId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CustomerId")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PickupDate")
@@ -113,19 +113,17 @@ namespace FribergRentals.Migrations
                     b.Property<DateTime>("ReturnDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("TimeOfOrder")
+                        .HasColumnType("datetime2");
+
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -212,19 +210,15 @@ namespace FribergRentals.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FribergRentals.Data.Models.Customer", null)
+                    b.HasOne("FribergRentals.Data.Models.Customer", "Customer")
                         .WithMany("CustomerOrders")
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("FribergRentals.Data.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Car");
 
-                    b.Navigation("User");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("FribergRentals.Data.Models.Customer", b =>
