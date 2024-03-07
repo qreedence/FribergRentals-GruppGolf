@@ -70,6 +70,7 @@
         Order.PickupDate = DateTime.Parse(PickupDate);
         Order.ReturnDate = DateTime.Parse(ReturnDate);
         IsLoggedIn = true;
+        await UpdatePrice();
     }
 
     async Task Submit()
