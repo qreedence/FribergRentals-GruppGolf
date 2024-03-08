@@ -69,7 +69,7 @@
             if (!userExists)
             {
                 await CustomerRepo.AddAsync(Customer);
-                Confirm = "User added";
+                NavigationManager.NavigateTo("/login");
             }
             else
             {

@@ -17,86 +17,99 @@
     <CategoryCheckbox Name="@category.Name" Id="category.Id" OnCategorySelection="HandleCheckboxChecked" />
 }
 
-<FilteredCarsList PickupDateToOrder="@PickupDate" ReturnDateToOrder="@ReturnDate" ListOfCars="FilteredCars"></FilteredCarsList>
+@if (IsValidReturnDate)
+{
+	<FilteredCarsList PickupDateToOrder="@PickupDate" ReturnDateToOrder="@ReturnDate" ListOfCars="FilteredCars"></FilteredCarsList>
+}
+else
+{
+	<p>Return date cannot be earlier than the pick-up date.</p>
+}
+
 
 
 @code {
-    public DateTime PickupDate { get; set; }
-    public DateTime ReturnDate { get; set; }
-    public List<Category> AllCategories { get; set; } = new List<Category>();
+	public DateTime PickupDate { get; set; }
+	public DateTime ReturnDate { get; set; }
+	public List<Category> AllCategories { get; set; } = new List<Category>();
 
-    public List<Category> SelectedCategories { get; set; } = new List<Category>();
-    public List<Car> FilteredCars { get; set; } = new List<Car>();
-    public List<Order> Orders { get; set; } = new List<Order>();
+	public List<Category> SelectedCategories { get; set; } = new List<Category>();
+	public List<Car> FilteredCars { get; set; } = new List<Car>();
+	public List<Order> Orders { get; set; } = new List<Order>();
 
-    protected override async Task OnInitializedAsync()
-    {
-        AllCategories = await CategoryRepo.GetAll();
-        FilteredCars = await CarRepo.GetAllAsync();
-        Orders = await OrderRepo.GetAllAsync();
-        PickupDate = DateTime.Now.Date;
-        ReturnDate = DateTime.Now.Date;
-    }
+	public bool IsValidReturnDate { get; set; } = true;
 
-    private void HandleCheckboxChecked(int id)
-    {
-        var category = AllCategories.FirstOrDefault(c => c.Id == id);
-        if (!SelectedCategories.Contains(category))
-        {
-            SelectedCategories.Add(category);
-        }
-        else
-        {
-            SelectedCategories.Remove(category);
-        }
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		AllCategories = await CategoryRepo.GetAll();
+		Orders = await OrderRepo.GetAllAsync();
+		PickupDate = DateTime.Now.Date;
+		ReturnDate = DateTime.Now.Date;
+	}
 
-    private async void AddToFiltered()
-    {
-        bool isSelected = false;
-        List<Car> ToBeRemoved = new List<Car>();
-        FilteredCars = await CarRepo.GetAllAsync();
+	private void HandleCheckboxChecked(int id)
+	{
+		var category = AllCategories.FirstOrDefault(c => c.Id == id);
+		if (!SelectedCategories.Contains(category))
+		{
+			SelectedCategories.Add(category);
+		}
+		else
+		{
+			SelectedCategories.Remove(category);
+		}
+	}
 
+	private async void AddToFiltered()
+	{
+		bool isSelected = false;
+		List<Car> ToBeRemoved = new List<Car>();
+		FilteredCars = await CarRepo.GetAllAsync();
+		if (ReturnDate < PickupDate)
+		{
+			IsValidReturnDate = false;
+		}
+		else
+		{
+			IsValidReturnDate = true;
+			if (SelectedCategories.Count > 0)
+			{
+				foreach (Car car in FilteredCars)
+				{
+					isSelected = false;
+					for (int i = 0; i < SelectedCategories.Count; i++)
+					{
+						if (car.Categories.Contains(SelectedCategories[i]))
+						{
+							isSelected = true;
+						}
+					}
+					if (isSelected == false)
+					{
+						ToBeRemoved.Add(car);
+					}
+				}
+				foreach (Car car in ToBeRemoved)
+				{
+					FilteredCars.Remove(car);
+				}
+			}
 
-        if (SelectedCategories.Count > 0)
-        {
-            foreach (Car car in FilteredCars)
-            {
-                isSelected = false;
-                for (int i = 0; i < SelectedCategories.Count; i++)
-                {
-                    if (car.Categories.Contains(SelectedCategories[i]))
-                    {
-                        isSelected = true;
-                    }
-                }
-                if (isSelected == false)
-                {
-                    ToBeRemoved.Add(car);
-                }
-            }
-            foreach (Car car in ToBeRemoved)
-            {
-                FilteredCars.Remove(car);
-            }
-        }
+			foreach (Order order in Orders)
+			{
+				if (ReturnDate < order.PickupDate && PickupDate < order.PickupDate || ReturnDate > order.PickupDate && PickupDate > order.PickupDate)
+				{
 
-        foreach (Order order in Orders)
-        {
-            if (ReturnDate < order.PickupDate && PickupDate < order.PickupDate || ReturnDate > order.PickupDate && PickupDate > order.PickupDate)
-            {
-
-            }
-            else
-            {
-                if (FilteredCars.Contains(order.Car))
-                {
-                    FilteredCars.Remove(order.Car);
-                }
-            }
-        }
-
-        StateHasChanged();
-    }
-
+				}
+				else
+				{
+					if (FilteredCars.Contains(order.Car))
+					{
+						FilteredCars.Remove(order.Car);
+					}
+				}
+			}
+		}
+		StateHasChanged();
+	}
 }
