@@ -45,8 +45,8 @@
                 @foreach (var order in ListOfOrders)
                 {
                     <tr>
-                        <td>@order.Car</td>
-                        <td>@order.Customer</td>
+                        <td>@order.Car.Brand @order.Car.Model</td>
+                        <td>@order.Customer.FirstName @order.Customer.LastName</td>
                         <td>@order.PickupDate</td>
                         <td>@order.ReturnDate</td>
                         <td>@order.TimeOfOrder</td>

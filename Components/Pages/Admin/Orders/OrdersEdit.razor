@@ -1,65 +1,91 @@
 ﻿@page "/admin/orders/edit"
 @page "/admin/orders/edit/{id:int}"
 @inject IOrder OrderRepo
+@inject ICar CarRepo
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
 <h3>Edit Order</h3>
 
 <EditForm Model="Order" OnSubmit="Submit" FormName="EditOrder">
-    
-    @*<div>
-    <label>Car</label>
-    <InputText @bind-Value="Order.Car" placeholder="@Order.Car"></InputText>
-    </div>
-    <div>
-    <label>Customer</label>
-    <InputText @bind-Value="Order.Customer" placeholder="@Order.Customer"></InputText>
-    </div>*@
-    
-    <div>
-        <label>Pick-up date</label>
-        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.PickupDate"></InputDate>
-    </div>
-    <div>
-        <label>Return date</label>
-        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.ReturnDate"></InputDate>
-    </div>
-    <div>
-        <label>Price</label>
-        <InputNumber @bind-Value="Order.TotalPrice" placeholder="@Order.TotalPrice"></InputNumber>
-    </div>
 
-    <button type="submit">Save Changes</button>
-    <button @onclick="Delete" type="button">Delete</button>
+	<div>
+		<label>Customer:</label>
+		<select @bind="customerId">		
+			@foreach (Customer item in CustomerList)
+			{
+				<option value="@item.Id">@item.FirstName @item.LastName</option>
+			}
+		</select>
+	</div>
+	<div>
+		<label>Car:</label>
+		<select @bind="carId">
+			@foreach (Car item in CarList)
+			{
+				<option value="@item.Id">@item.Brand @item.Model</option>
+			}
+		</select>
+	</div>
+	<div>
+		<label>Pick-up date</label>
+		<InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.PickupDate"></InputDate>
+	</div>
+	<div>
+		<label>Return date</label>
+		<InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.ReturnDate"></InputDate>
+	</div>
+	<div>
+		<label>Price</label>
+		<InputNumber @bind-Value="Order.TotalPrice" placeholder="@Order.TotalPrice"></InputNumber>
+	</div>
+
+	<button type="submit">Save Changes</button>
+	<button @onclick="Delete" type="button">Delete</button>
 </EditForm>
 
 <NavLink href="admin/orders" Match="NavLinkMatch.All">Back</NavLink>
 
 @code {
-    [Parameter]
-    public int Id { get; set; }
+	[Parameter]
+	public int Id { get; set; }
 
-    [SupplyParameterFromForm]
-    public Order Order { get; set; } = new Order();
+	[SupplyParameterFromForm]
+	public Order Order { get; set; } = new Order();
 
-    protected override async Task OnParametersSetAsync()
-    {
-        if (Id > 0)
-        {
-            Order = await OrderRepo.GetByIdAsync(Id);
-        }
-    }
+	public List<Customer> CustomerList { get; set; } = new List<Customer>();
+	public List<Car> CarList { get; set; } = new List<Car>();
 
-    async Task Submit()
-    {
-        await OrderRepo.EditAsync(Order);
-        NavigationManager.NavigateTo("/admin/orders");
-    }
+	public int carId { get; set; }
+	public int customerId { get; set; } 
 
-    async Task Delete()
-    {
-        await OrderRepo.DeleteAsync(Order.Id);
-        NavigationManager.NavigateTo("admin/orders");
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		CarList = await CarRepo.GetAllAsync();
+		CustomerList = await CustomerRepo.GetAllAsync();
+	}
+
+	protected override async Task OnParametersSetAsync()
+	{
+		if (Id > 0)
+		{
+			Order = await OrderRepo.GetByIdAsync(Id);
+			customerId = Order.Customer.Id;
+			carId = Order.Car.Id;
+		}
+	}
+
+	async Task Submit()
+	{
+		Order.Customer = await CustomerRepo.GetByIdAsync(customerId);
+		Order.Car = await CarRepo.GetByIdAsync(carId);
+		await OrderRepo.EditAsync(Order);
+		NavigationManager.NavigateTo("/admin/orders");
+	}
+
+	async Task Delete()
+	{
+		await OrderRepo.DeleteAsync(Order.Id);
+		NavigationManager.NavigateTo("admin/orders");
+	}
 }
