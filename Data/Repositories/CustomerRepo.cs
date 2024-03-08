@@ -40,15 +40,15 @@ namespace FribergRentals.Data.Repositories
         //    throw new NotImplementedException();
         //}
 
-        //public async Task<List<Customer>> GetAllAsync()
-        //{             
-        //    return await _applicationDbContext.Customers.ToListAsync();
-        //}
+        public async Task<List<Customer>> GetAllAsync()
+        {
+            return await _applicationDbContext.Customers.ToListAsync();
+        }
 
-        //public User GetById(int id)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public async Task<Customer> GetByIdAsync(int id)
+        {
+			return await _applicationDbContext.Customers.FindAsync(id);
+		}
         //public void SaveUserChanges(User user)
         //{
         //    _applicationDbContext.Add(user);
