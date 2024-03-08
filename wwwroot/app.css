@@ -501,6 +501,25 @@ a {
     font-family: "Josefin Sans", sans-serif;
 }
 
+select {
+    border-radius: 8px;
+    border: none;
+    padding-block: 0.6rem;
+    padding-inline: 0.6rem;
+    box-shadow: 4px 4px 12px -5px;
+    font-family: "Josefin Sans", sans-serif;
+    background-color: white;
+}
+
+    select::backdrop {
+        border-radius: 8px;
+        border: none;
+        padding-block: 0.6rem;
+        padding-inline: 0.6rem;
+        font-family: "Josefin Sans", sans-serif;
+        background-color: white;
+    }
+
 .login-btn {
     font-family: "Josefin Sans", sans-serif;
     padding-inline: 6rem;

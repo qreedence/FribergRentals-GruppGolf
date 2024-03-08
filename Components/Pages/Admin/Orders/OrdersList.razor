@@ -3,7 +3,6 @@
 
 <div class="card page-card">
     <h3>Orders</h3>
-
     <table>
         @{
             if (ListOfOrders != null)
@@ -46,8 +45,8 @@
                     @foreach (var order in ListOfOrders)
                     {
                         <tr>
-                            <td>@order.Car</td>
-                            <td>@order.Customer</td>
+                            <td>@order.Car.Brand @order.Car.Model</td>
+                            <td>@order.Customer.FirstName @order.Customer.LastName</td>
                             <td>@order.PickupDate.ToString("yyyy-MM-dd HH:mm")</td>
                             <td>@order.ReturnDate.ToString("yyyy-MM-dd HH:mm")</td>
                             <td>@order.TimeOfOrder.ToString("yyyy-MM-dd HH:mm")</td>

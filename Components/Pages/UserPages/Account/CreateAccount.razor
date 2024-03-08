@@ -51,7 +51,7 @@
             if (Customer != null)
             {
                 Customer.Id = 0;
-                List<User> allUsers = await CustomerRepo.GetAllAsync();
+                List<User> allUsers = await UserRepo.GetAllAsync();
                 bool userExists = false;
                 foreach (var user in allUsers)
                 {
