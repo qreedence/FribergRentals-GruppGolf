@@ -42,10 +42,8 @@ namespace FribergRentals.Utilities
             }
         }
 
-        public string CheckUser(HttpContext httpContext)
+        public async Task<string> CheckUser(string sessionToken)
         {
-            var sessionToken = httpContext.Request.Cookies["SessionToken"].ToString();
-
             if (string.IsNullOrEmpty(sessionToken))
             {
                 return "Not logged in";
@@ -53,7 +51,7 @@ namespace FribergRentals.Utilities
 
             if (!string.IsNullOrEmpty(sessionToken))
             {
-                var user = userRepo.ValidateSessionToken(sessionToken);
+                User user = await userRepo.ValidateSessionToken(sessionToken);
                 if (user is Customer)
                 {
                     return "user";

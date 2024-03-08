@@ -11,7 +11,7 @@
         User = await UserRepo.GetByIdAsync(Id);
         if (User != null)
         {
-            NavigationManager.NavigateTo($"admin/Users/edituser/{Id}");
+            NavigationManager.NavigateTo($"admin/users/edit/{Id}");
         }
    
         else
