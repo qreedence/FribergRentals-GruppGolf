@@ -3,27 +3,31 @@
 
 @rendermode InteractiveServer
 
-@if (Id == null)
-{
-	<h3>Create Category</h3>
-}
-else
-{
-	<h3>Edit Category</h3>
-}
-
-<EditForm Model="category" OnSubmit="HandleSubmit" FormName="editCategory">
-	<label>Name</label>
-	<InputText @bind-Value="category.Name">@category.Name</InputText>
-		<div>
-			<button type="submit">Submit</button>
-			@if (Id != null)
+<div class="card page-card">
+	<EditForm class="form edit" Model="category" OnSubmit="HandleSubmit" FormName="editCategory">
+		@if (Id == null)
 		{
-			<button @onclick="DeleteCategory" type="button">Delete</button>
+			<h3>Create Category</h3>
 		}
-	</div>
+		else
+		{
+			<h3>Edit Category</h3>
+		}
+		<div class="flex-row">
+			<label>Name</label>
+			<InputText @bind-Value="category.Name">@category.Name</InputText>
+		</div>
+		<div class="form-btns">
+			<button class="form-btn" type="submit">Submit</button>
+			@if (Id != null)
+			{
+				<button class="form-btn danger" @onclick="DeleteCategory" type="button">Delete</button>
+			}
+		</div>
+		
+	</EditForm>
+</div>
 
-</EditForm>
 
 
 @code {

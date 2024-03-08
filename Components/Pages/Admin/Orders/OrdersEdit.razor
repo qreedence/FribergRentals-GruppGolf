@@ -5,46 +5,48 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<h3>Edit Order</h3>
+<div class="card page-card">
+	<EditForm class="form edit" Model="Order" OnSubmit="Submit" FormName="EditOrder">
+		<h3>Edit Order</h3>
+		<div class="flex-row">
+			<label>Customer:</label>
+			<select @bind="customerId">
+				@foreach (Customer item in CustomerList)
+				{
+					<option value="@item.Id">@item.FirstName @item.LastName</option>
+				}
+			</select>
+		</div>
+		<div class="flex-row">
+			<label>Car:</label>
+			<select @bind="carId">
+				@foreach (Car item in CarList)
+				{
+					<option value="@item.Id">@item.Brand @item.Model</option>
+				}
+			</select>
+		</div>
+		<div class="flex-row">
+			<label>Pick-up date</label>
+			<InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.PickupDate"></InputDate>
+		</div>
+		<div class="flex-row"
+			<label>Return date</label>
+			<InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.ReturnDate"></InputDate>
+		</div>
+		<div class="flex-row">
+			<label>Price</label>
+			<InputNumber @bind-Value="Order.TotalPrice" placeholder="@Order.TotalPrice"></InputNumber>
+		</div>
+		<div class="form-btns">
+			<button class="form-btn" type="submit">Save Changes</button>
+			<button class="form-btn danger" @onclick="Delete" type="button">Delete</button>
+		</div>
+	</EditForm>
+	<NavLink href="admin/orders" Match="NavLinkMatch.All">Back</NavLink>
+</div>
 
-<EditForm Model="Order" OnSubmit="Submit" FormName="EditOrder">
 
-	<div>
-		<label>Customer:</label>
-		<select @bind="customerId">		
-			@foreach (Customer item in CustomerList)
-			{
-				<option value="@item.Id">@item.FirstName @item.LastName</option>
-			}
-		</select>
-	</div>
-	<div>
-		<label>Car:</label>
-		<select @bind="carId">
-			@foreach (Car item in CarList)
-			{
-				<option value="@item.Id">@item.Brand @item.Model</option>
-			}
-		</select>
-	</div>
-	<div>
-		<label>Pick-up date</label>
-		<InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.PickupDate"></InputDate>
-	</div>
-	<div>
-		<label>Return date</label>
-		<InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.ReturnDate"></InputDate>
-	</div>
-	<div>
-		<label>Price</label>
-		<InputNumber @bind-Value="Order.TotalPrice" placeholder="@Order.TotalPrice"></InputNumber>
-	</div>
-
-	<button type="submit">Save Changes</button>
-	<button @onclick="Delete" type="button">Delete</button>
-</EditForm>
-
-<NavLink href="admin/orders" Match="NavLinkMatch.All">Back</NavLink>
 
 @code {
 	[Parameter]

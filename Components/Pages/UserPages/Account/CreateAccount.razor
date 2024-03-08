@@ -3,83 +3,77 @@
 @using FribergRentals.Data.Models
 @using FribergRentals.Data.Interfaces
 
-<h3>Add a new user</h3>
+<div class="login-page">
+    <EditForm class="form" Model="Customer" OnSubmit="Submit" FormName="new-user-form">
+        <div>
+            <span class="material-symbols-outlined">account_circle</span>
+            <InputText @bind-Value="Customer!.FirstName" placeholder="First Name" />
+        </div>
+        <div>
+            <span class="material-symbols-outlined">account_circle</span>
+            <InputText @bind-Value="Customer!.LastName" placeholder="Last Name" />
+        </div>
+        <div>
+            <span class="material-symbols-outlined">mail</span>
+            <InputText @bind-Value="Customer!.Email" placeholder="Email"/>
+        </div>
+        <div>
+            <span class="material-symbols-outlined">lock</span>
+            <InputText type="password" @bind-Value="Customer!.Password" placeholder="Password"></InputText>
+        </div>
+        <div>
+            <span class="material-symbols-outlined">lock</span>
+            <InputText type="password" @bind-Value="Customer!.ConfirmPassword" placeholder="Confirm Password"></InputText>
+        </div>
+        <button class="login-btn small" type="submit">Create Account</button>
+        <p>@Confirm</p>
 
-<EditForm Model="Customer" OnSubmit="Submit" FormName="new-user-form">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <div>
-        <dl>
-            <dt>Firstname</dt>
-            <dd>
-                <InputText @bind-Value="Customer!.FirstName" />
-            </dd>
-            <dt>Lastname</dt>
-                <dd>
-                <InputText @bind-Value="Customer!.LastName" />
-                </dd>
-            <dt>Email</dt>
-                <dd>
-                <InputText @bind-Value="Customer!.Email" />
-                </dd>
-                <dt>Password</dt>
-            <dd>
-                <InputText type="password" @bind-Value="Customer!.Password"></InputText>
-            </dd>
-            <dt>Confirm Password</dt>
-            <dd>
-                <InputText type="password" @bind-Value="Customer!.ConfirmPassword"></InputText>
-            </dd>
-         </dl>
-    </div>
-    <div>
-        <button type="submit">Add user</button>
-    </div>
-</EditForm>
-
-<p>@Confirm</p>
-
-@if(BackLinkVisible)
-{
-    <NavLink href="/" Match="@NavLinkMatch.All">Go back</NavLink>
-}
-
-@code {
-    [SupplyParameterFromForm]
-    public Customer Customer { get; set; }
-    public string Id { get; set; }
-    public string Confirm;
-    public bool BackLinkVisible = false;
-    protected override void OnInitialized() => Customer ??= new();
-
-    async Task Submit()
-    {
-        if (Customer != null)
+        @if (BackLinkVisible)
         {
-            Customer.Id = 0;
-            List<User> allUsers = await UserRepo.GetAllAsync();
-            bool userExists = false;
-            foreach(var user in allUsers)
+            <NavLink href="/" Match="@NavLinkMatch.All">Go back</NavLink>
+        }
+    </EditForm>
+</div>
+
+
+
+
+    @code {
+        [SupplyParameterFromForm]
+        public Customer Customer { get; set; }
+        public string Id { get; set; }
+        public string Confirm;
+        public bool BackLinkVisible = false;
+        protected override void OnInitialized() => Customer ??= new();
+
+        async Task Submit()
+        {
+            if (Customer != null)
             {
-                if(user.Email == Customer.Email)
+                Customer.Id = 0;
+                List<User> allUsers = await UserRepo.GetAllAsync();
+                bool userExists = false;
+                foreach (var user in allUsers)
                 {
-                    userExists = true;
+                    if (user.Email == Customer.Email)
+                    {
+                        userExists = true;
+                    }
                 }
-            }
-            if (!userExists)
-            {
-                await CustomerRepo.AddAsync(Customer);
-                NavigationManager.NavigateTo("/login");
+                if (!userExists)
+                {
+                    await CustomerRepo.AddAsync(Customer);
+                    NavigationManager.NavigateTo("/login");
+                }
+                else
+                {
+                    Confirm = "An account with that email address already exists!";
+                }
             }
             else
             {
-                Confirm = "An account with that email address already exists!";
+                Confirm = "Something went wrong, try again!";
             }
+            BackLinkVisible = true;
         }
-        else
-        {
-            Confirm = "Something went wrong, try again!";
-        }
-        BackLinkVisible = true;
     }
-}

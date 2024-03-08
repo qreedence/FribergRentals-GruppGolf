@@ -3,17 +3,23 @@
 @inject NavigationManager NavigationManager
 @using System.ComponentModel.DataAnnotations
 
-    <EditForm Model="LoginForm" OnSubmit="LogIn" FormName="LogInForm">
+<div class="login-page">
+    <EditForm class="form" Model="LoginForm" OnSubmit="LogIn" FormName="LogInForm">
         <div>
-            <label>E-Mail</label>
-            <InputText @bind-Value="LoginForm.Email"></InputText>
+            <span class="material-symbols-outlined">mail</span>
+            <InputText @bind-Value="LoginForm.Email" placeholder="Email"></InputText>
         </div>
         <div>
-            <label>Password</label>
-            <InputText type="password" @bind-Value="LoginForm.Password"></InputText>
+            <span class="material-symbols-outlined">
+                lock
+            </span>
+            <InputText type="password" @bind-Value="LoginForm.Password" placeholder="Password"></InputText>
         </div>
-        <button type="submit">Log In</button>
+        <button class="login-btn" type="submit">Log In</button>
+        <p class="create-account">Don't have an account yet? <NavLink href="/createaccount">Sign up now.</NavLink></p>
     </EditForm>
+</div>
+
 
 
 @code {
@@ -48,7 +54,7 @@
                         Expires = DateTimeOffset.Now.AddMinutes(60),
                         Path = "/"
                     });
-                    NavigationManager.NavigateTo("/");
+                NavigationManager.NavigateTo("/");
             }
         }
     }

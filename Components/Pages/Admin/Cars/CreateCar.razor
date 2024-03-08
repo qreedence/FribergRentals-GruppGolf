@@ -2,58 +2,60 @@
 
 @rendermode InteractiveServer
 
-<h3>Add New Car</h3>
+<div class="card page-card">
+    <EditForm class="form edit" Model="Car" OnSubmit="Submit" FormName="CreateCar">
+        <h3>Add New Car</h3>
+        <div class="flex-row">
+            <label>Brand</label>
+            <InputText @bind-Value="Car.Brand"></InputText>
+        </div>
+        <div class="flex-row">
+            <label>Model</label>
+            <InputText @bind-Value="Car.Model"></InputText>
+        </div>
+        <div class="flex-row">
+            <label>Description</label>
+            <InputText @bind-Value="Car.Description"></InputText>
+        </div>
+        <div class="flex-row">
+            <label>Price</label>
+            <InputNumber @bind-Value="Car.Price"></InputNumber>
+        </div>
+        <div class="flex-row">
+            <label>Image URL 1</label>
+            <InputText @bind-Value="Car.ImageUrl1"></InputText>
+        </div>
+        <div class="flex-row">
+            <label>Image URL 2</label>
+            <InputText @bind-Value="Car.ImageUrl2"></InputText>
+        </div>
+        <div class="flex-row">
+            <label>Image URL 3</label>
+            <InputText @bind-Value="Car.ImageUrl3"></InputText>
+        </div>
 
-<EditForm Model="Car" OnSubmit="Submit" FormName="CreateCar">
-    <div>
-        <label>Brand</label>
-        <InputText @bind-Value="Car.Brand"></InputText>
-    </div>
-    <div>
-        <label>Model</label>
-        <InputText @bind-Value="Car.Model"></InputText>
-    </div>
-    <div>
-        <label>Description</label>
-        <InputText @bind-Value="Car.Description"></InputText>
-    </div>
-    <div>
-        <label>Price</label>
-        <InputNumber @bind-Value="Car.Price"></InputNumber>
-    </div>
-    <div>
-        <label>Image URLs (Optional)</label>
-        <label>Image URL 1</label>
-        <InputText @bind-Value="Car.ImageUrl1"></InputText>
-        <label>Image URL 2</label>
-        <InputText @bind-Value="Car.ImageUrl2"></InputText>
-        <label>Image URL 3</label>
-        <InputText @bind-Value="Car.ImageUrl3"></InputText>
-    </div>
-    <div>
-        <label>Categories</label>
-        @if (Categories == null)
-        {
-            <p>Loading..</p>
-        }
-        else if (Categories.Count == 0)
-        {
-            <p>No categories found.</p>
-        } 
-        else
-        {
-            <ul>
-                @foreach (var category in Categories)
-                {
-                    <CategoryCheckbox Name="@category.Name" Id="category.Id" OnCategorySelection="HandleCheckboxChecked" />
-                }
-            </ul>
-        }
-    </div>
+        <div class="flex-row">
+            <label>Categories</label>
+            @if (Categories == null)
+            {
+                <p>Loading..</p>
+            }
+            else if (Categories.Count == 0)
+            {
+                <p>No categories found.</p>
+            }
+            else
+            {
+                    @foreach (var category in Categories)
+                    {
+                        <CategoryCheckbox Name="@category.Name" Id="category.Id" OnCategorySelection="HandleCheckboxChecked" />
+                    }
+            }
+        </div>
+        <button class="form-btn" type="submit">Create</button>
+    </EditForm>
+</div>
 
-
-    <button type="submit">Create</button>
-</EditForm>
 
 @code {
     [SupplyParameterFromForm]

@@ -1,65 +1,67 @@
 ﻿@page "/admin/orders"
 @inject IOrder OrderRepo
 
-<h3>Orders</h3>
-
-<table>
-    @{
-        if (ListOfOrders != null)
-        {
-            if (ListOfOrders.Count() > 0)
+<div class="card page-card">
+    <h3>Orders</h3>
+    <table>
+        @{
+            if (ListOfOrders != null)
             {
-                <thead>
-                    <tr>
-                        <th>Car</th>
-                        <th>Customer</th>
-                        <th>Pick-up date</th>
-                        <th>Return date</th>
-                        <th>Time of order</th>
-                        <th>Total price</th>
-                    </tr>
-                </thead>
+                if (ListOfOrders.Count() > 0)
+                {
+                    <thead>
+                        <tr>
+                            <th>Car</th>
+                            <th>Customer</th>
+                            <th>Pick-up date</th>
+                            <th>Return date</th>
+                            <th>Time of order</th>
+                            <th>Total price</th>
+                        </tr>
+                    </thead>
+                }
             }
         }
-    }
-    <tbody>
-        @{
-            if (ListOfOrders == null)
-            {
-                <tr>
-                    <td colspan="9">
-                        <span>Loading...</span>
-                    </td>
-                </tr>
-            }
-            else if (ListOfOrders.Count == 0)
-            {
-                <tr>
-                    <td colspan="9">
-                        <span>No orders found.</span>
-                    </td>
-                </tr>
-            }
-            else
-            {
-                @foreach (var order in ListOfOrders)
+        <tbody>
+            @{
+                if (ListOfOrders == null)
                 {
                     <tr>
-                        <td>@order.Car.Brand @order.Car.Model</td>
-                        <td>@order.Customer.FirstName @order.Customer.LastName</td>
-                        <td>@order.PickupDate</td>
-                        <td>@order.ReturnDate</td>
-                        <td>@order.TimeOfOrder</td>
-                        <td>@order.TotalPrice</td>
-                        <td>
-                            <EditOrderButton Id="@order.Id"></EditOrderButton>
+                        <td colspan="9">
+                            <span>Loading...</span>
                         </td>
                     </tr>
                 }
+                else if (ListOfOrders.Count == 0)
+                {
+                    <tr>
+                        <td colspan="9">
+                            <span>No orders found.</span>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var order in ListOfOrders)
+                    {
+                        <tr>
+                            <td>@order.Car.Brand @order.Car.Model</td>
+                            <td>@order.Customer.FirstName @order.Customer.LastName</td>
+                            <td>@order.PickupDate.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@order.ReturnDate.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@order.TimeOfOrder.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@($"{order.TotalPrice.ToString("N0")}kr")</td>
+                            <td>
+                                <EditOrderButton Id="@order.Id"></EditOrderButton>
+                            </td>
+                        </tr>
+                    }
+                }
             }
-         }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
+
 
 
 @code {
