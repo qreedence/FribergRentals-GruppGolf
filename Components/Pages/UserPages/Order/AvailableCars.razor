@@ -12,10 +12,9 @@
 
 <button @onclick="AddToFiltered">Search</button>
 <br />
-
 @foreach (Category category in AllCategories)
 {
-	<CategoryCheckbox Name="@category.Name" Id="category.Id" OnCategorySelection="HandleCheckboxChecked" />
+    <CategoryCheckbox Name="@category.Name" Id="category.Id" OnCategorySelection="HandleCheckboxChecked" />
 }
 
 @if (IsValidReturnDate)
@@ -113,5 +112,4 @@ else
 		}
 		StateHasChanged();
 	}
-
 }
