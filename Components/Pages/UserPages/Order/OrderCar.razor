@@ -13,102 +13,87 @@
 <h3>Select Pick-up Date and Return Date</h3>
 
 <EditForm Model="Order" OnSubmit="Submit" FormName="Make-Order">
-    <div>
-        <label>Pick-up Date</label>
-        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.PickupDate" @bind-Value:after="UpdatePrice" readonly>
-        </InputDate>
+	<div>
+		<label>Pick-up Date</label>
+		<InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.PickupDate" @bind-Value:after="UpdatePrice" readonly>
+		</InputDate>
 
-    </div>
-    <div>
-        <label>Return Date</label>
-        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.ReturnDate" @bind-Value:after="@UpdatePrice" readonly>
-    </InputDate>
-    </div>
-    <p>
-        @Car.Brand @Car.Model
-    </p>
-    <p>Price per day: @Car.Price</p>
-    @if(IsValidReturnDate)
-    {
-        <p>TotalPrice: @Order.TotalPrice</p>
-    }
-    else
-    {
-        <p>Return date cannot be earlier than the pick-up date.</p>
-    }
+	</div>
+	<div>
+		<label>Return Date</label>
+		<InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.ReturnDate" @bind-Value:after="@UpdatePrice" readonly>
+		</InputDate>
+	</div>
+	<p>
+		@Car.Brand @Car.Model
+	</p>
+	<p>Price per day: @Car.Price</p>
 
-    <button type="submit">Confirm</button>
-    @if (!IsLoggedIn)
-    {
-        <p>Please <NavLink href="/login" Match="NavLinkMatch.All">log in</NavLink> before placing an order.</p>
-    }
+	<p>TotalPrice: @Order.TotalPrice</p>
+
+
+	<button type="submit">Confirm</button>
+	@if (!IsLoggedIn)
+	{
+		<p>Please <NavLink href="/login" Match="NavLinkMatch.All">log in</NavLink> before placing an order.</p>
+	}
 </EditForm>
 
 
 @code {
-    [Parameter]
-    public int Id { get; set; }
+	[Parameter]
+	public int Id { get; set; }
 
-    [Parameter]
-    public string PickupDate { get; set; }
+	[Parameter]
+	public string PickupDate { get; set; }
 
-    [Parameter]
-    public string ReturnDate { get; set; }
+	[Parameter]
+	public string ReturnDate { get; set; }
 
-    [SupplyParameterFromForm]
-    public Order Order { get; set; } = new Order();
+	[SupplyParameterFromForm]
+	public Order Order { get; set; } = new Order();
 
-    public Car Car { get; set; } = new Car();
+	public Car Car { get; set; } = new Car();
 
-    public bool IsValidReturnDate { get; set; }
+	public bool IsLoggedIn { get; set; }
 
-    public bool IsLoggedIn { get; set; }
+	protected override async Task OnInitializedAsync()
+	{
+		Car = await CarRepo.GetByIdAsync(Id);
+		Order.PickupDate = DateTime.Parse(PickupDate);
+		Order.ReturnDate = DateTime.Parse(ReturnDate);
+		IsLoggedIn = true;
+		await UpdatePrice();
+	}
 
-    protected override async Task OnInitializedAsync()
-    {
-        Car = await CarRepo.GetByIdAsync(Id);
-        Order.PickupDate = DateTime.Parse(PickupDate);
-        Order.ReturnDate = DateTime.Parse(ReturnDate);
-        IsLoggedIn = true;
-        await UpdatePrice();
-    }
+	async Task Submit()
+	{
+		HttpContext HttpContext = HttpContextAccessor.HttpContext;
+		string sessionToken = SessionUtilities.ExtractSessionToken(HttpContext);
+		Order.Customer = (Customer)await CustomerRepo.ValidateSessionToken(sessionToken);
+		if (Order.Customer != null && Order.Customer is Customer)
+		{
+			Order.Car = Car;
+			Order.TimeOfOrder = DateTime.Now.Date;
+			await OrderRepo.AddAsync(Order);
+			await CustomerRepo.AddOrderAsync(Order.Customer, Order);
+			NavigationManager.NavigateTo("/userpages/cars/order/confirmation");
+		}
+		else
+		{
+			IsLoggedIn = false;
+		}
+	}
 
-    async Task Submit()
-    {
-        HttpContext HttpContext = HttpContextAccessor.HttpContext;
-        string sessionToken = SessionUtilities.ExtractSessionToken(HttpContext);
-        Order.Customer = (Customer)await CustomerRepo.ValidateSessionToken(sessionToken);
-        if (Order.Customer != null && Order.Customer is Customer)
-        {
-            Order.Car = Car;
-            Order.TimeOfOrder = DateTime.Now.Date;
-            await OrderRepo.AddAsync(Order);
-            await CustomerRepo.AddOrderAsync(Order.Customer, Order);
-            NavigationManager.NavigateTo("/userpages/cars/order/confirmation");
-        }
-        else
-        {
-            IsLoggedIn = false;
-        }
+	async Task UpdatePrice()
+	{
+		int numberOfDays = (int)(Order.ReturnDate - Order.PickupDate).Days;
+		if (numberOfDays < 1)
+		{
+			numberOfDays = 1;
+		}
+		Order.TotalPrice = numberOfDays * Car.Price;
 
-    }
-
-    async Task UpdatePrice()
-    {
-        if (Order.ReturnDate < Order.PickupDate)
-        {
-            IsValidReturnDate = false;
-        }
-        else
-        {
-            IsValidReturnDate = true;
-            int numberOfDays = (int)(Order.ReturnDate - Order.PickupDate).Days;
-            if (numberOfDays < 1)
-            {
-                numberOfDays = 1;
-            }
-            Order.TotalPrice = numberOfDays * Car.Price;
-            StateHasChanged();
-        }
-    }
+		StateHasChanged();
+	}
 }

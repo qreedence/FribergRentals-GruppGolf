@@ -18,7 +18,15 @@
 	<CategoryCheckbox Name="@category.Name" Id="category.Id" OnCategorySelection="HandleCheckboxChecked" />
 }
 
-<FilteredCarsList PickupDateToOrder="@PickupDate" ReturnDateToOrder="@ReturnDate" ListOfCars="FilteredCars"></FilteredCarsList>
+@if (IsValidReturnDate)
+{
+	<FilteredCarsList PickupDateToOrder="@PickupDate" ReturnDateToOrder="@ReturnDate" ListOfCars="FilteredCars"></FilteredCarsList>
+}
+else
+{
+	<p>Return date cannot be earlier than the pick-up date.</p>
+}
+
 
 
 @code {
@@ -30,10 +38,11 @@
 	public List<Car> FilteredCars { get; set; } = new List<Car>();
 	public List<Order> Orders { get; set; } = new List<Order>();
 
+	public bool IsValidReturnDate { get; set; } = true;
+
 	protected override async Task OnInitializedAsync()
 	{
 		AllCategories = await CategoryRepo.GetAll();
-		FilteredCars = await CarRepo.GetAllAsync();
 		Orders = await OrderRepo.GetAllAsync();
 		PickupDate = DateTime.Now.Date;
 		ReturnDate = DateTime.Now.Date;
@@ -57,46 +66,51 @@
 		bool isSelected = false;
 		List<Car> ToBeRemoved = new List<Car>();
 		FilteredCars = await CarRepo.GetAllAsync();
-
-
-		if (SelectedCategories.Count > 0)
+		if (ReturnDate < PickupDate)
 		{
-			foreach (Car car in FilteredCars)
+			IsValidReturnDate = false;
+		}
+		else
+		{
+			IsValidReturnDate = true;
+			if (SelectedCategories.Count > 0)
 			{
-				isSelected = false;
-				for (int i = 0; i < SelectedCategories.Count; i++)
-				{					
-					if (car.Categories.Contains(SelectedCategories[i]))
+				foreach (Car car in FilteredCars)
+				{
+					isSelected = false;
+					for (int i = 0; i < SelectedCategories.Count; i++)
 					{
-						isSelected = true;
+						if (car.Categories.Contains(SelectedCategories[i]))
+						{
+							isSelected = true;
+						}
+					}
+					if (isSelected == false)
+					{
+						ToBeRemoved.Add(car);
 					}
 				}
-				if (isSelected == false)
+				foreach (Car car in ToBeRemoved)
 				{
-					ToBeRemoved.Add(car);
+					FilteredCars.Remove(car);
 				}
 			}
-			foreach (Car car in ToBeRemoved)
-			{
-				FilteredCars.Remove(car);
-			}
-		}
 
-		foreach (Order order in Orders)
-		{
-			if (ReturnDate < order.PickupDate && PickupDate < order.PickupDate || ReturnDate > order.PickupDate && PickupDate > order.PickupDate)
+			foreach (Order order in Orders)
 			{
-
-			}
-			else
-			{
-				if (FilteredCars.Contains(order.Car))
+				if (ReturnDate < order.PickupDate && PickupDate < order.PickupDate || ReturnDate > order.PickupDate && PickupDate > order.PickupDate)
 				{
-					FilteredCars.Remove(order.Car);
+
+				}
+				else
+				{
+					if (FilteredCars.Contains(order.Car))
+					{
+						FilteredCars.Remove(order.Car);
+					}
 				}
 			}
 		}
-
 		StateHasChanged();
 	}
 
