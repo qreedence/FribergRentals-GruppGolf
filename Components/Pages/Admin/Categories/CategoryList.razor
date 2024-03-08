@@ -3,28 +3,42 @@
 
 @rendermode InteractiveServer
 
-<h3>CategoryList</h3>
+<div class="card page-card">
+	@if (categories == null)
+	{
+		<span>No Categories</span>
+	}
+	else if (categories.Count == 0)
+	{
+		<span>No Categories</span>
+	}
+	else
+	{
+		<table>
+			<thead>
+				<tr>
+					<th colspan="2">Categories</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var category in categories)
+				{
+					<tr>
+						<td>
+							@category.Name
+						</td>
+						<td>
+							<EditCategoryButton Id="category.Id" />
+						</td> 
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
 
-@if (categories == null)
-{
-	<span>No Categories</span>
-}
-else if (categories.Count == 0)
-{
-	<span>No Categories</span>
-}
-else
-{
-	<ul>
-		@foreach (var category in categories)
-		{
-			<li>@category.Name <EditCategoryButton Id="category.Id" /></li>
-		}
-	</ul>
+	<button class="btn dark" @onclick="CreateCategory">Create New</button>
+</div>
 
-}
-
-<button @onclick="CreateCategory">Create New</button>
 
 @code {
 
@@ -37,6 +51,6 @@ else
 
 	void CreateCategory()
 	{
-		NavigationManager.NavigateTo("category/edit/");
+		NavigationManager.NavigateTo("admin/categories/edit/");
 	}
 }

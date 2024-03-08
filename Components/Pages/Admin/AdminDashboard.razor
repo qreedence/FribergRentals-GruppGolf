@@ -1,32 +1,36 @@
 ﻿@page "/admin"
 
-<div class="admin-dashboard-grid">
-    <div class="card">
+<div class="grid-container">
+    <div class="card float-up">
+        <span class="material-symbols-outlined svg">
+            today
+        </span>
+        <NavLink href="/admin/cars/prepare"><button>Cars to Prepare</button></NavLink>
+    </div>
+    <div class="card float-up">
+        <span class="material-symbols-outlined svg">
+            receipt_long
+        </span>
+        <NavLink href="/admin/orders"><button>Orders</button></NavLink>
+    </div>
+    <div class="card float-up">
         <span class="material-symbols-outlined svg">
             directions_car
         </span>
         <NavLink href="/admin/cars"><button>Cars</button></NavLink>
     </div>
-
-    <div class="card">
+    <div class="card float-up">
         <span class="material-symbols-outlined svg">
             settings
         </span>
         <NavLink href="/admin/categories"><button>Categories</button></NavLink>
     </div>
 
-    <div class="card">
+    <div class="card float-up">
         <span class="material-symbols-outlined svg">
             person
         </span>
         <NavLink href="/admin/users"><button>Users</button></NavLink>
-    </div>
-
-    <div class="card">
-        <span class="material-symbols-outlined svg">
-            receipt_long
-        </span>
-        <NavLink href="/admin/orders"><button>Orders</button></NavLink>
     </div>
 </div>
 @code {

@@ -3,23 +3,37 @@
 
 @rendermode InteractiveServer
 
-<h3>EditUser</h3>
-<EditForm Model="UserModell" OnSubmit="Submit" FormName="EditUser">
-    <div>
-        <label>Firstname</label>
-        <InputText @bind-Value="UserModell.FirstName" placeholder="@UserModell.FirstName"></InputText>
-    </div>
-    <div>
-        <label>Model</label>
-        <InputText @bind-Value="UserModell.LastName" placeholder="@UserModell.LastName"></InputText>
-    </div>
-    <div>
-        <label>Description</label>
-        <InputText @bind-Value="UserModell.Email" placeholder="@UserModell.Email"></InputText>
-    </div>
-    <button type="submit">Edit</button>
-    <button @onclick="Delete" type="button">Delete</button>
-</EditForm>
+<div class="card page-card">
+    <EditForm class="form edit" Model="UserModell" OnSubmit="Submit" FormName="EditUser">
+        <h3>Edit User</h3>
+        <div class="flex-row">
+            <label>First Name</label>
+            <InputText @bind-Value="UserModell.FirstName" placeholder="@UserModell.FirstName"></InputText>
+        </div>
+        <div class="flex-row">
+            <label>Last Name</label>
+            <InputText @bind-Value="UserModell.LastName" placeholder="@UserModell.LastName"></InputText>
+        </div>
+        <div class="flex-row">
+            <label>Email</label>
+            <InputText @bind-Value="UserModell.Email" placeholder="@UserModell.Email"></InputText>
+        </div>
+        <div class="flex-row">
+            <label>Password</label>
+            <InputText @bind-Value="UserModell.Password" placeholder="@UserModell.Password"></InputText>
+        </div>
+        <div class="flex-row">
+            <label>Confirm Password</label>
+            <InputText @bind-Value="UserModell.ConfirmPassword" placeholder="@UserModell.ConfirmPassword"></InputText>
+        </div>
+        <div class="form-btns">
+            <button class="form-btn" type="submit">Save Changes</button>
+            <button class="form-btn danger" @onclick="Delete" type="button">Delete</button>
+        </div>
+    </EditForm>
+</div>
+
+
 @code {
 
     public class UserModel {
@@ -68,6 +82,6 @@
         User.Password = UserModell.Password;
         User.ConfirmPassword = UserModell.ConfirmPassword;
         await UserRepo.DeleteAsync(User.Id);
-        NavigationManager.NavigateTo("/Customers");
+        NavigationManager.NavigateTo("/admin/users");
     }
 }

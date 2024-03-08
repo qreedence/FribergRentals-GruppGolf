@@ -4,29 +4,39 @@
 @inject ICar CarRepo
 @rendermode InteractiveServer
 
-<label for="pickup">Pickup Date:</label>
-<input type="datetime-local" @bind-value="@PickupDate" id="from" />
+<div class="login-page">
+	<div class="form">
+		<div class="flex-row">
+			<label for="pickup">Pickup Date:</label>
+			<input type="datetime-local" @bind-value="@PickupDate" id="from" />
+		</div>
+		<div class="flex-row">
+			<label for="return">Return Date:</label>
+			<input type="datetime-local" @bind-value="@ReturnDate" id="from" />
+		</div>
+		<div class="flex-row">
+			<p>Categories:</p>
+			@foreach (Category category in AllCategories)
+			{
+				<CategoryCheckbox Name="@category.Name" Id="category.Id" OnCategorySelection="HandleCheckboxChecked" />
+			}
+		</div>
+		<div>
+			<button class="login-btn" @onclick="AddToFiltered">Find Available Cars</button>
+		</div>
+		@if (IsValidReturnDate)
+		{
+			<div>
+			<FilteredCarsList PickupDateToOrder="@PickupDate" ReturnDateToOrder="@ReturnDate" ListOfCars="FilteredCars"></FilteredCarsList>
+			</div>
+		}
+		else
+		{
+			<p id="glass-error">Return date cannot be earlier than the pick-up date.</p>
+		}
+	</div>
 
-<label for="return">Return Date:</label>
-<input type="datetime-local" @bind-value="@ReturnDate" id="from" />
-
-<button @onclick="AddToFiltered">Search</button>
-<br />
-@foreach (Category category in AllCategories)
-{
-    <CategoryCheckbox Name="@category.Name" Id="category.Id" OnCategorySelection="HandleCheckboxChecked" />
-}
-
-@if (IsValidReturnDate)
-{
-	<FilteredCarsList PickupDateToOrder="@PickupDate" ReturnDateToOrder="@ReturnDate" ListOfCars="FilteredCars"></FilteredCarsList>
-}
-else
-{
-	<p>Return date cannot be earlier than the pick-up date.</p>
-}
-
-
+</div>
 
 @code {
 	public DateTime PickupDate { get; set; }
