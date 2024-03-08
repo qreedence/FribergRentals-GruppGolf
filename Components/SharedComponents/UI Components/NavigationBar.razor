@@ -1,0 +1,82 @@
+﻿@inject FribergRentals.Utilities.SessionUtilities SessionUtilities
+@inject IHttpContextAccessor HttpContextAccessor
+
+<div class="navbar">
+    <div class="logo">
+        <NavLink href="/" Match="NavLinkMatch.All">
+                <span class="top">FRIBERG</span><br />
+                <span class="bottom">RENTALS</span>
+        </NavLink>
+    </div>
+    <div class="nav-mid">
+        @if (User is Admin)
+        {
+            <NavLink class="border-hover" href="/admin">Admin Dashboard</NavLink>
+            <NavLink class="border-hover" href="/search">Customer View</NavLink>
+        }
+        else
+        {
+            <NavLink class="border-hover" href="/search">Find A Car</NavLink>
+        }
+        
+    </div>
+    <div class="nav-right">
+            @if (IsLoggedIn == true)
+            {
+            <div>
+                <p>Welcome back,</p>
+                <p class="text-big">@User.FirstName</p>
+                <LogOut></LogOut>
+            </div>
+            
+            }
+            else
+            {
+                <NavLink class="border-hover" href="/login" Match="NavLinkMatch.All">Log in</NavLink>
+                <NavLink class="border-hover" href="/createaccount" Match="NavLinkMatch.All">Create Account</NavLink>
+            }
+    <div/> 
+</div>
+</div>
+
+@code {
+    public User User { get; set; }
+    public bool IsLoggedIn { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        HttpContext HttpContext = HttpContextAccessor.HttpContext;
+        string sessionToken = await GetSessionToken(HttpContext);
+        string userType = await SessionUtilities.CheckUser(sessionToken);
+        await GetUser(userType, sessionToken);
+    }
+
+    async Task GetUser(string userType, string sessionToken)
+    {
+        if (sessionToken != null)
+        {
+            if (userType == "user")
+            {
+                IsLoggedIn = true;
+                User = await CustomerRepo.ValidateSessionToken(sessionToken);
+                StateHasChanged();
+            }
+            else if (userType == "admin")
+            {
+                IsLoggedIn = true;
+                User = await AdminRepo.ValidateSessionToken(sessionToken);
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            IsLoggedIn = false;
+        }
+    }
+
+    async Task<string> GetSessionToken(HttpContext HttpContext)
+    {
+        string sessionToken = SessionUtilities.ExtractSessionToken(HttpContext);
+        return sessionToken;
+    }
+}
