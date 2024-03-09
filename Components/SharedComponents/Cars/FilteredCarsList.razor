@@ -2,41 +2,25 @@
 @inject ICar CarRepo
 @rendermode InteractiveServer
 
-<h3>Cars</h3>
-
-<table>
-    <tbody>
-        @{
-            if (ListOfCars == null)
+@{
+    if (ListOfCars == null)
+    {
+        <p class="glass-error">Loading...</p>
+    }
+    else if (ListOfCars.Count == 0)
+    {
+        <p class="glass-error">No cars found.</p>
+    }
+    else
+    {
+        <div class="car-grid-container">
+            @foreach (var car in ListOfCars)
             {
-                <tr>
-                    <td colspan="10">
-                        <span>Loading...</span>
-                    </td>
-                </tr>
-            }
-            else if (ListOfCars.Count == 0)
-            {
-                <tr>
-                    <td colspan="10">
-                        <span>No cars found.</span>
-                    </td>
-                </tr>
-            }
-            else
-            {
-                @foreach (var car in ListOfCars)
-                {
-                    <tr>
-                        <td>@car.Brand</td>
-                        <td>@car.Model</td>
-                        <td>@car.Description</td>
-                        <td>@car.Price</td>
-                        <td><img src="@car.ImageUrl1" /></td>
-                        <td>@car.ImageUrl2</td>
-                        <td>@car.ImageUrl3</td>
-                        <td>
-                            @if (car.Categories == null)
+                <div class="card car-card">
+                    <img src="@car.ImageUrl1" />
+                        <h2>@car.Brand @car.Model</h2>
+                    <h2>@($"{car.Price.ToString("N0")}kr")<span class="per-day">/Day</span></h2>
+                            @* @if (car.Categories == null)
                             {
                                 <p>No categories found.</p>
                             }
@@ -46,17 +30,14 @@
                                 {
                                     <p>@category.Name</p>
                                 }
-                            }
-                        </td>
-                        <td>
+                            } *@
                             <OrderButton PickupDate="@PickupDateToOrder" ReturnDate="@ReturnDateToOrder" Id="@car.Id"></OrderButton>
-                        </td>
-                    </tr>
-                }
+                </div>
             }
-        }
-    </tbody>
-</table>
+        </div>
+       
+    }
+}
 
 @code {
     [Parameter]

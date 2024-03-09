@@ -1,82 +1,88 @@
 ﻿@page "/admin/cars"
 
-<h3>Cars</h3>
+<div class="card page-card">
+    <h3>Cars</h3>
 
-<table>
-    @{
-        if (ListOfCars != null)
-        {
-            if (ListOfCars.Count() > 0)
+    <table>
+        @{
+            if (ListOfCars != null)
             {
-                <thead>
-                    <tr>
-                        <th>Brand</th>
-                        <th>Model</th>
-                        <th>Description</th>
-                        <th>Price</th>
-                        <th>Image URL 1</th>
-                        <th>Image URL 2</th>
-                        <th>Image URL 3</th>
-                        <th colspan="2">Categories</th>
-                    </tr>
-                </thead>
+                if (ListOfCars.Count() > 0)
+                {
+                    <thead>
+                        <tr>
+                            <th>Brand</th>
+                            <th>Model</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Image 1</th>
+                            <th>Image 2</th>
+                            <th>Image 3</th>
+                            <th>Categories</th>
+                        </tr>
+                    </thead>
+                }
             }
         }
-    }
-    <tbody>
-        @{
-            if (ListOfCars == null)
-            {
-                <tr>
-                    <td colspan="9">
-                        <span>Loading...</span>
-                    </td>
-                </tr>
-            }
-            else if (ListOfCars.Count == 0)
-            {
-                <tr>
-                    <td colspan="9">
-                        <span>No cars found.</span>
-                    </td>
-                </tr>
-            }
-            else
-            {
-                @foreach (var car in ListOfCars)
+        <tbody>
+            @{
+                if (ListOfCars == null)
                 {
                     <tr>
-                        <td>@car.Brand</td>
-                        <td>@car.Model</td>
-                        <td>@car.Description</td>
-                        <td>@car.Price</td>
-                        <td>@car.ImageUrl1</td>
-                        <td>@car.ImageUrl2</td>
-                        <td>@car.ImageUrl3</td>
-                        <td>
-                            @if (car.Categories == null)
-                            {
-                                <p>No categories found.</p>
-                            }
-                            else if (car.Categories.Count > 0)
-                            {
-                                @foreach (var category in car.Categories)
-                                {
-                                    <p>@category.Name</p>
-                                }
-                            }
-                        </td>
-                        <td>
-                            <GenericNavigationButton Url="admin/cars/edit" Id="@car.Id"></GenericNavigationButton>
+                        <td colspan="9">
+                            <span>Loading...</span>
                         </td>
                     </tr>
                 }
+                else if (ListOfCars.Count == 0)
+                {
+                    <tr>
+                        <td colspan="9">
+                            <span>No cars found.</span>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var car in ListOfCars)
+                    {
+                        <tr>
+                            <td>@car.Brand</td>
+                            <td>@car.Model</td>
+                            <td>@car.Description</td>
+                            <td>@car.Price</td>
+                            <td><img src="@car.ImageUrl1" /></td>
+                            <td><img src="@car.ImageUrl2" /></td>
+                            <td><img src="@car.ImageUrl3" /></td>
+                            <td>
+                                @if (car.Categories == null)
+                                {
+                                    <p>No categories found.</p>
+                                }
+                                else if (car.Categories.Count > 0)
+                                {
+                                    @foreach (var category in car.Categories)
+                                    {
+                                        <p>@category.Name</p>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                <EditCarButton Id="@car.Id"></EditCarButton>
+                            </td>
+                        </tr>
+                    }
+                }
             }
-         }
-    </tbody>
-</table>
+        </tbody>
+    </table>
 
-<NavLink href="/admin/cars/create" Match="NavLinkMatch.All">Create New Car</NavLink>
+    <button class="btn dark"><NavLink href="/admin/cars/create" Match="NavLinkMatch.All">Create New Car</NavLink></button>
+    
+</div>
+
+
+
 
 @code {
     List<Car> ListOfCars = null;
