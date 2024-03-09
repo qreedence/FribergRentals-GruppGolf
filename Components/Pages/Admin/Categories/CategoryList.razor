@@ -18,7 +18,7 @@ else
 	<ul>
 		@foreach (var category in categories)
 		{
-			<li>@category.Name <EditCategoryButton Id="category.Id" /></li>
+			<li>@category.Name <GenericNavigationButton Url="admin/categories/edit" Id="category.Id" /></li>
 		}
 	</ul>
 
@@ -37,6 +37,6 @@ else
 
 	void CreateCategory()
 	{
-		NavigationManager.NavigateTo("category/edit/");
+		NavigationManager.NavigateTo("admin/categories/edit/");
 	}
 }

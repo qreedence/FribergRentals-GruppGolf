@@ -52,7 +52,7 @@
                         <td>@order.TimeOfOrder</td>
                         <td>@order.TotalPrice</td>
                         <td>
-                            <EditOrderButton Id="@order.Id"></EditOrderButton>
+                            <GenericNavigationButton Url="admin/orders/edit" Id="order.Id"></GenericNavigationButton>
                         </td>
                     </tr>
                 }

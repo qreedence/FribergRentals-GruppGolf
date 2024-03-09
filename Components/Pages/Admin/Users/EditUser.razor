@@ -57,6 +57,7 @@
         User.Password = UserModell.Password;
         User.ConfirmPassword = UserModell.ConfirmPassword;
         await UserRepo.EditAsync(User);
+        NavigationManager.NavigateTo("/admin/users");
         
     }
     async Task Delete()
