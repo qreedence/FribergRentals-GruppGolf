@@ -52,7 +52,7 @@
                             <td>@order.TimeOfOrder.ToString("yyyy-MM-dd HH:mm")</td>
                             <td>@($"{order.TotalPrice.ToString("N0")}kr")</td>
                             <td>
-                                <EditOrderButton Id="@order.Id"></EditOrderButton>
+                                <GenericNavigationButton Url="admin/orders/edit" Id="order.Id"></GenericNavigationButton>
                             </td>
                         </tr>
                     }
