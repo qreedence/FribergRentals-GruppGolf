@@ -37,7 +37,7 @@
                         <td>@user.LastName</td>
                         <td>@user.Email</td>
                         <td>
-                            <EditUserButton Id="@user.Id"></EditUserButton>
+                        <GenericNavigationButton Url="admin/users/edit" Id="user.Id"></GenericNavigationButton>
                         </td>
                     </tr>
                 }

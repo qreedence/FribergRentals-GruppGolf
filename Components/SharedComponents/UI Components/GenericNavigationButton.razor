@@ -7,10 +7,12 @@
 </button>
 @code {
 	[Parameter]
+	public string Url { get; set; }
+	[Parameter]
 	public int Id { get; set; }
 
 	void EditCar()
 	{
-		NavigationManager.NavigateTo($"admin/cars/edit/{Id}");
+		NavigationManager.NavigateTo($"{Url}/{Id}");
 	}
 }
