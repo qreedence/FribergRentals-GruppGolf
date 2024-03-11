@@ -19,14 +19,11 @@
 				<img src="@Car.ImageUrl3" />
 			</div>
 		</div>
-		<div class="flex-row">
+		<div class="flex-row space-between">
 				<label>Pick-up Date</label>
 				<InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.PickupDate" @bind-Value:after="UpdatePrice" readonly></InputDate>
-				<label class="flex-row">Return Date</label>
+				<label>Return Date</label>
 				<InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.ReturnDate" @bind-Value:after="@UpdatePrice" readonly></InputDate>
-		</div>
-		<div>
-			
 		</div>
 		<div class="car-blurb">
 			<h2>
