@@ -19,7 +19,7 @@
 				<img src="@Car.ImageUrl3" />
 			</div>
 		</div>
-		<div class="flex-row space-between">
+		<div class="flex-row">
 			<div class="flex-row">
 				<label>Pick-up Date</label>
 				<InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.PickupDate" @bind-Value:after="UpdatePrice" readonly></InputDate>
@@ -28,13 +28,12 @@
 				<label>Return Date</label>
 				<InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.ReturnDate" @bind-Value:after="@UpdatePrice" readonly></InputDate>
 			</div>
-				
 		</div>
 		<div class="car-blurb">
 			<h2>
 				@Car.Brand @Car.Model
 			</h2>
-			<p>@Car.Description</p>
+			<p id="description">@Car.Description</p>
 			<p>Price per day:</p> <h3>@($"{Car.Price.ToString("N0")}kr")<span class="per-day">/Day</span></h3>
 			<p>Total Price:</p><h2>@($"{Order.TotalPrice.ToString("N0")}kr")<span class="per-day">/Day</span></h2>
 		</div>
@@ -87,7 +86,7 @@
 			Order.TimeOfOrder = DateTime.Now;
 			await OrderRepo.AddAsync(Order);
 			await CustomerRepo.AddOrderAsync(Order.Customer, Order);
-			NavigationManager.NavigateTo("/userpages/cars/order/confirmation");
+			NavigationManager.NavigateTo($"/cars/order/confirmation/{Order.Id}");
 		}
 		else
 		{

@@ -1,0 +1,44 @@
+﻿@page "/cars/order/confirmation/{Id:int}"
+
+@if(Order != null)
+{
+    <div class="login-page">
+        <div class="form">
+            <p id="order-confirm">
+                Thank you for your order!<br />
+            </p>
+            <div class="flex-row">
+                <p id="order-confirm">Order Number:</p> <p id="order-confirm">@Order.Id</p>
+            </div>
+            <div class="flex-row">
+                <p id="order-confirm">Car:</p> <p id="order-confirm">@Order.Car.Brand @Order.Car.Model</p>
+            </div>
+            <div class="flex-row">
+                <p id="order-confirm">Total Price:</p><p id="order-confirm">@($"{Order.TotalPrice.ToString("N0")}kr")</p>
+            </div>
+            <div class="flex-row">
+                <p id="order-confirm">Pick-up Date:</p><p id="order-confirm">@Order.PickupDate.ToString("yyyy-MM-dd HH:mm")</p>
+            </div> 
+            <div class="flex-row">
+                <p id="order-confirm">Return Date:</p><p id="order-confirm">@Order.ReturnDate.ToString("yyyy-MM-dd HH:mm")</p>
+            </div>
+            <div class="flex-row">
+                <p id="order-confirm">Time of Order:</p><p id="order-confirm">@Order.TimeOfOrder.ToString("yyyy-MM-dd HH:mm")</p>
+            </div>
+        </div>
+    </div>
+    
+}
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public Order Order { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Order = await OrderRepo.GetByIdAsync(Id);
+    }
+}
