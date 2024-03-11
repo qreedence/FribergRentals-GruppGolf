@@ -1,0 +1,16 @@
+﻿@rendermode InteractiveServer
+
+<button @onclick="EditCar">
+	<span class="material-symbols-outlined">
+		edit
+	</span>
+</button>
+@code {
+	[Parameter]
+	public int Id { get; set; }
+
+	void EditCar()
+	{
+		NavigationManager.NavigateTo($"admin/cars/edit/{Id}");
+	}
+}
