@@ -27,7 +27,7 @@
 			<div class="flex-row">
 				<label>Return Date</label>
 				<InputDate Type="InputDateType.DateTimeLocal" @bind-Value="@Order.ReturnDate" @bind-Value:after="@UpdatePrice" readonly></InputDate>
-			</div>
+			</div>	
 		</div>
 		<div class="car-blurb">
 			<h2>
@@ -44,9 +44,6 @@
 		}
 	</EditForm>
 </div>
-
-
-
 
 
 @code {
